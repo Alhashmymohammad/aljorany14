@@ -2,274 +2,228 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#6c63ff">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#4f46e5">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Aljorany">
+<title>Aljorany</title>
 <link rel="manifest" href="manifest.json">
-<title>Aljorany - البحث في ملفات Excel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-:root {
-  --bg:#f0f4ff;--surface:#fff;--surface2:#f8f9ff;
-  --primary:#6c63ff;--primary2:#a78bfa;--accent:#06b6d4;
-  --text:#1e1b4b;--text2:#6b7280;--border:#e5e7eb;
-  --shadow:rgba(108,99,255,.15);--card:#fff;
-  --res-bg:#f5f3ff;--prog-bg:#e0e7ff;--ok:#10b981;
-}
-[data-theme="dark"]{
-  --bg:#0f0f1a;--surface:#1a1a2e;--surface2:#16213e;
-  --primary:#7c73ff;--primary2:#a78bfa;--accent:#22d3ee;
-  --text:#e0e7ff;--text2:#9ca3af;--border:#2d2d4e;
-  --shadow:rgba(124,115,255,.25);--card:#1e1e35;
-  --res-bg:#1a1a35;--prog-bg:#1e1b4b;--ok:#34d399;
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:all .3s}
-
-.hdr{background:linear-gradient(135deg,#6c63ff,#a855f7,#06b6d4);padding:22px 18px 32px;position:relative;overflow:hidden}
-.hdr::before{content:'';position:absolute;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.08);top:-100px;right:-70px}
-.hdr-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
-.app-name{font-size:30px;font-weight:900;color:#fff;letter-spacing:2px;text-shadow:0 2px 15px rgba(0,0,0,.3)}
-.app-sub{font-size:12px;color:rgba(255,255,255,.85);margin-top:4px;position:relative;z-index:1}
-.theme-btn{width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.2);color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;flex-shrink:0}
-.theme-btn:active{transform:scale(.9)}
-
-.main{padding:18px 14px 50px;max-width:640px;margin:0 auto}
-
-.card{background:var(--card);border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:0 4px 20px var(--shadow);border:1px solid var(--border);transition:all .3s}
-.sec-lbl{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:11px;display:flex;align-items:center;gap:5px}
-
-.imp-btn{width:100%;padding:18px;border-radius:14px;border:2.5px dashed var(--primary);background:linear-gradient(135deg,rgba(108,99,255,.06),rgba(167,139,250,.06));color:var(--primary);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:all .3s}
-.imp-btn:active{transform:scale(.98)}
+:root{--p1:#4f46e5;--p2:#7c3aed;--p3:#2563eb;--grad:linear-gradient(135deg,#4f46e5 0%,#7c3aed 50%,#2563eb 100%);--bg:#f5f3ff;--bg2:#ede9fe;--surface:#ffffff;--surface2:#f8f7ff;--text:#1e1b4b;--text2:#5b5b8a;--text3:#9ca3af;--border:rgba(99,102,241,0.15);--border2:rgba(99,102,241,0.3);--shadow:0 4px 20px rgba(79,70,229,0.12);--ok:#10b981;--r:18px;--r2:12px;}
+[data-theme="dark"]{--bg:#0d0b1e;--bg2:#13103a;--surface:#1a1740;--surface2:#1e1b4b;--text:#e8e5ff;--text2:#a5b4fc;--text3:#6b7280;--border:rgba(99,102,241,0.2);--border2:rgba(99,102,241,0.4);--shadow:0 4px 20px rgba(0,0,0,0.4);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow-x:hidden}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;min-height:100vh;min-height:-webkit-fill-available}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 50% at 20% 10%,rgba(99,102,241,.07) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(124,58,237,.06) 0%,transparent 70%)}
+.header{background:var(--grad);padding:env(safe-area-inset-top,0) 0 0;position:sticky;top:0;z-index:100;box-shadow:0 4px 30px rgba(79,70,229,0.4)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 18px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:40px;height:40px;background:rgba(255,255,255,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(255,255,255,0.3)}
+.logo-text{font-size:22px;font-weight:900;color:#fff;letter-spacing:1px}
+.logo-sub{font-size:10px;color:rgba(255,255,255,0.75);font-weight:600}
+.icon-btn{width:38px;height:38px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.35);background:rgba(255,255,255,0.15);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.icon-btn:active{transform:scale(.92)}
+.scroll-area{height:calc(100vh - 68px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative;z-index:1}
+.scroll-area::-webkit-scrollbar{width:0}
+.content{padding:16px 14px 80px;max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.card{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;transition:all .3s}
+.card-head{padding:14px 16px 10px;display:flex;align-items:center;gap:8px}
+.card-icon{width:30px;height:30px;border-radius:8px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.card-title{font-size:13px;font-weight:700;color:var(--text2);letter-spacing:.5px}
+.card-body{padding:0 14px 14px}
 #fileInput{display:none}
-.fmt-hint{font-size:11px;color:var(--text2);text-align:center;margin-top:7px}
-
-.file-info{display:none;align-items:center;gap:11px;padding:13px;background:var(--res-bg);border-radius:13px;border:1px solid var(--border);margin-top:11px}
+.import-zone{border:2px dashed var(--border2);border-radius:var(--r2);padding:22px 16px;text-align:center;cursor:pointer;background:var(--surface2);transition:all .25s}
+.import-zone:active{background:rgba(79,70,229,.08)}
+.import-icon{font-size:36px;margin-bottom:8px;display:block}
+.import-text{font-size:15px;font-weight:700;color:var(--p1);margin-bottom:4px}
+.import-hint{font-size:11px;color:var(--text3);line-height:1.5}
+.file-info{display:none;margin-top:10px;padding:12px;background:var(--surface2);border-radius:var(--r2);border:1px solid var(--border);gap:10px;align-items:center}
 .file-info.show{display:flex}
-.f-ico{font-size:32px;flex-shrink:0}
-.f-det{flex:1;min-width:0}
-.f-name{font-weight:700;font-size:13px;word-break:break-all}
-.f-meta{font-size:11px;color:var(--text2);margin-top:2px}
-.s-badge{font-size:11px;font-weight:700;padding:4px 11px;border-radius:20px;background:linear-gradient(135deg,#6c63ff,#a855f7);color:#fff;white-space:nowrap;flex-shrink:0}
-
-.prog-wrap{display:none;margin-top:13px}
+.file-icon-wrap{font-size:28px;flex-shrink:0}
+.file-details{flex:1;min-width:0}
+.file-name{font-size:13px;font-weight:700;color:var(--text);word-break:break-all;line-height:1.3}
+.file-meta{font-size:11px;color:var(--text3);margin-top:3px}
+.status-pill{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;white-space:nowrap;flex-shrink:0;background:var(--grad);color:#fff}
+.prog-wrap{display:none;margin-top:12px}
 .prog-wrap.show{display:block}
-.prog-top{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px}
-.prog-bg{height:11px;background:var(--prog-bg);border-radius:11px;overflow:hidden}
-.prog-fill{height:100%;border-radius:11px;background:linear-gradient(90deg,#6c63ff,#a855f7,#06b6d4,#6c63ff);background-size:300% 100%;animation:gm 2s linear infinite;transition:width .4s ease;width:0%}
-@keyframes gm{0%{background-position:0% 50%}100%{background-position:300% 50%}}
-
-.stats{display:none;gap:10px;margin-bottom:14px}
-.stats.show{display:flex}
-.stat{flex:1;background:var(--card);border:1px solid var(--border);border-radius:13px;padding:11px 7px;text-align:center;box-shadow:0 2px 10px var(--shadow)}
-.stat-n{font-size:22px;font-weight:900;background:linear-gradient(135deg,#6c63ff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.stat-l{font-size:10px;color:var(--text2);margin-top:2px;font-weight:600}
-
-.srch-row{display:flex;gap:9px;align-items:center}
-.srch-in{flex:1;padding:14px 16px;border-radius:13px;border:2px solid var(--border);background:var(--surface2);color:var(--text);font-size:16px;outline:none;transition:all .3s;font-family:inherit;direction:rtl}
-.srch-in:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(108,99,255,.12);background:var(--surface)}
-.srch-in::placeholder{color:var(--text2)}
-.srch-btn{width:52px;height:52px;border-radius:13px;border:none;background:linear-gradient(135deg,#6c63ff,#a855f7);color:#fff;font-size:21px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;flex-shrink:0}
-.srch-btn:active{transform:scale(.92)}
-.srch-btn:disabled{opacity:.4;cursor:not-allowed}
-
-/* FILTER */
-.filter-bar{display:none;margin-top:13px;flex-direction:column;gap:12px;border-top:1px solid var(--border);padding-top:13px}
-.filter-bar.show{display:flex}
-.filter-title{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
-.filter-row{display:flex;flex-wrap:wrap;gap:7px}
-.fchip{padding:8px 15px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text2);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit}
-.fchip.active{background:linear-gradient(135deg,#6c63ff,#a855f7);color:#fff;border-color:transparent;box-shadow:0 3px 10px rgba(108,99,255,.35)}
-.fchip:active{transform:scale(.95)}
-.schip{padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
-.schip.active{background:var(--accent);color:#fff;border-color:transparent}
-
-.mode-info{font-size:11px;color:var(--text2);text-align:center;margin-top:9px;padding:7px;background:var(--surface2);border-radius:9px;line-height:1.6}
-.mbadge{display:inline-block;background:linear-gradient(135deg,#6c63ff,#a855f7);color:#fff;padding:2px 9px;border-radius:10px;font-weight:700;font-size:10px}
-
-.tog-btn{width:100%;margin-top:11px;padding:10px;border-radius:11px;border:1.5px solid var(--border);background:var(--surface2);color:var(--primary);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:inherit;transition:all .2s}
-.tog-btn:active{transform:scale(.98)}
-
-/* RESULTS */
-.res-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}
-.res-title{font-size:14px;font-weight:800;display:flex;align-items:center;gap:7px}
-.cnt-badge{background:linear-gradient(135deg,#6c63ff,#a855f7);color:#fff;font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px}
-.copy-all{padding:7px 14px;border-radius:9px;border:none;background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
-.copy-all:active{transform:scale(.95)}
-
-.res-list{display:flex;flex-direction:column;gap:11px}
-.res-item{background:var(--res-bg);border:1.5px solid var(--border);border-right:5px solid var(--primary);border-radius:15px;padding:14px 14px 14px 48px;position:relative;animation:si .25s ease}
-@keyframes si{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:translateY(0)}}
-
-.res-name{font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px;line-height:1.5}
-.res-name mark{background:linear-gradient(135deg,rgba(108,99,255,.25),rgba(168,85,247,.25));color:var(--primary);border-radius:4px;padding:0 3px;font-weight:900}
-
-.res-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
-.tag{font-size:10px;padding:2px 9px;border-radius:20px;background:rgba(108,99,255,.1);color:var(--primary2);font-weight:700}
-
-/* كل محتوى السطر */
-.row-full{border-top:1px dashed var(--border);padding-top:9px;margin-top:4px;display:flex;flex-wrap:wrap;gap:5px}
-.cell-box{padding:4px 10px;border-radius:8px;font-size:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);line-height:1.5;max-width:100%;word-break:break-word}
-.cell-box.hit{background:linear-gradient(135deg,rgba(108,99,255,.18),rgba(168,85,247,.18));border-color:var(--primary);color:var(--primary);font-weight:700}
-
-.copy-btn{position:absolute;top:13px;left:13px;width:32px;height:32px;border-radius:9px;border:none;background:rgba(108,99,255,.1);color:var(--primary);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.prog-labels{display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--text2);margin-bottom:6px}
+.prog-track{height:8px;background:var(--bg2);border-radius:8px;overflow:hidden}
+.prog-bar{height:100%;border-radius:8px;background:var(--grad);background-size:200% 100%;animation:gs 1.8s linear infinite;transition:width .4s cubic-bezier(.4,0,.2,1);width:0%}
+@keyframes gs{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+.stats-row{display:none;grid-template-columns:repeat(3,1fr);gap:10px}
+.stats-row.show{display:grid}
+.stat-card{background:var(--surface);border-radius:var(--r2);border:1px solid var(--border);padding:12px 8px;text-align:center;box-shadow:0 2px 8px rgba(79,70,229,0.08)}
+.stat-value{font-size:20px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2}
+.stat-label{font-size:10px;color:var(--text3);font-weight:600;margin-top:3px}
+.search-wrap{display:flex;gap:8px;align-items:stretch}
+.search-input{flex:1;padding:14px 16px;border-radius:var(--r2);border:2px solid var(--border);background:var(--surface2);color:var(--text);font-size:15px;font-family:'Cairo',sans-serif;font-weight:600;outline:none;transition:all .25s;direction:rtl;min-width:0}
+.search-input:focus{border-color:var(--p1);background:var(--surface);box-shadow:0 0 0 4px rgba(79,70,229,.12)}
+.search-input::placeholder{color:var(--text3);font-weight:400}
+.search-btn{width:52px;border-radius:var(--r2);border:none;background:var(--grad);color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;box-shadow:var(--shadow)}
+.search-btn:active{transform:scale(.93)}
+.search-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.mode-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-size:11px;color:var(--text3)}
+.mode-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;background:rgba(79,70,229,.12);color:var(--p1);font-size:11px;font-weight:700}
+.filter-toggle{width:100%;margin-top:10px;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);background:transparent;color:var(--p1);font-size:13px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s}
+.filter-toggle:active{background:var(--surface2)}
+.filter-panel{display:none;flex-direction:column;gap:14px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.filter-panel.show{display:flex}
+.filter-sec-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.chips-wrap{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:7px 14px;border-radius:20px;border:1.5px solid var(--border2);background:var(--surface2);color:var(--text2);font-size:12px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;transition:all .2s;white-space:nowrap}
+.chip.active{background:var(--grad);color:#fff;border-color:transparent;box-shadow:0 3px 12px rgba(79,70,229,.3)}
+.chip:active{transform:scale(.95)}
+.mode-desc{padding:9px 12px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);font-size:11px;color:var(--text2);line-height:1.7;margin-top:8px}
+.res-header{padding:14px 16px 10px;display:flex;align-items:center;justify-content:space-between}
+.res-title{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px}
+.cnt-pill{background:var(--grad);color:#fff;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px}
+.copy-all-btn{padding:7px 14px;border-radius:9px;border:none;background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;font-size:12px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px}
+.copy-all-btn:active{transform:scale(.95)}
+.res-list{padding:0 12px 12px;display:flex;flex-direction:column;gap:10px}
+.res-item{background:var(--surface2);border:1.5px solid var(--border);border-right:4px solid var(--p1);border-radius:14px;padding:13px 13px 13px 46px;position:relative;animation:fu .25s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.res-name{font-size:17px;font-weight:800;color:var(--text);line-height:1.5;margin-bottom:8px}
+.res-name mark{background:linear-gradient(135deg,rgba(79,70,229,.2),rgba(124,58,237,.2));color:var(--p1);border-radius:4px;padding:0 3px;font-weight:900;font-style:normal}
+.res-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.rtag{font-size:10px;padding:2px 9px;border-radius:20px;background:rgba(79,70,229,.1);color:var(--p2);font-weight:700}
+.row-cells{display:flex;flex-wrap:wrap;gap:5px;padding-top:9px;border-top:1px dashed var(--border2)}
+.cell{padding:4px 10px;border-radius:8px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--surface);color:var(--text);word-break:break-word;max-width:100%;line-height:1.5}
+.cell.matched{background:linear-gradient(135deg,rgba(79,70,229,.15),rgba(124,58,237,.15));border-color:var(--p1);color:var(--p1);font-weight:700}
+.copy-btn{position:absolute;top:12px;left:12px;width:30px;height:30px;border-radius:8px;border:none;background:rgba(79,70,229,.1);color:var(--p1);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.copy-btn:active{transform:scale(.9)}
 .copy-btn.done{background:var(--ok);color:#fff}
-
-.empty{text-align:center;padding:45px 15px;color:var(--text2)}
-.empty .em{font-size:52px;margin-bottom:13px}
-.empty p{font-size:14px;line-height:1.7}
-
-.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(120px);background:#1e1e35;color:#fff;padding:12px 26px;border-radius:30px;font-size:13px;font-weight:600;transition:transform .35s cubic-bezier(.34,1.56,.64,1);z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,.45);white-space:nowrap}
+.empty-state{text-align:center;padding:50px 20px;color:var(--text3)}
+.empty-emoji{font-size:52px;margin-bottom:14px}
+.empty-text{font-size:14px;line-height:1.8;color:var(--text2)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#1e1b4b;color:#fff;padding:11px 24px;border-radius:30px;font-size:13px;font-family:'Cairo',sans-serif;font-weight:700;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,.4);transition:transform .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
-::-webkit-scrollbar{width:5px}
-::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
 </style>
 </head>
 <body data-theme="light">
 
-<div class="hdr">
-  <div class="hdr-top">
-    <div>
-      <div class="app-name">🔍 Aljorany</div>
-      <div class="app-sub">الجوراني — البحث الذكي في ملفات Excel</div>
+<div class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">🔍</div>
+      <div>
+        <div class="logo-text">Aljorany</div>
+        <div class="logo-sub">البحث الذكي في Excel</div>
+      </div>
     </div>
-    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
+    <button class="icon-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
   </div>
 </div>
 
-<div class="main">
+<div class="scroll-area">
+<div class="content">
 
-  <!-- IMPORT -->
   <div class="card">
-    <div class="sec-lbl">📂 استيراد ملف Excel</div>
-    <input type="file" id="fileInput" accept=".xlsx,.xls,.xlsm,.xlsb,.xltx,.xltm,.ods,.csv" onchange="loadFile(this)">
-    <button class="imp-btn" onclick="document.getElementById('fileInput').click()">
-      <span style="font-size:24px">📊</span><span>اضغط لاختيار الملف</span>
-    </button>
-    <p class="fmt-hint">xlsx · xls · xlsm · xlsb · xltx · xltm · ods · csv</p>
-    <div class="file-info" id="fileInfo">
-      <div class="f-ico">📗</div>
-      <div class="f-det">
-        <div class="f-name" id="fName">—</div>
-        <div class="f-meta" id="fMeta">—</div>
+    <div class="card-head">
+      <div class="card-icon">📂</div>
+      <div class="card-title">استيراد ملف Excel</div>
+    </div>
+    <div class="card-body">
+      <input type="file" id="fileInput" accept=".xlsx,.xls,.xlsm,.xlsb,.xltx,.xltm,.ods,.csv" onchange="loadFile(this)">
+      <div class="import-zone" onclick="document.getElementById('fileInput').click()">
+        <span class="import-icon">📊</span>
+        <div class="import-text">اضغط لاختيار الملف</div>
+        <div class="import-hint">xlsx · xls · xlsm · xlsb · xltx · xltm · ods · csv</div>
       </div>
-      <div class="s-badge" id="fStatus">جاري...</div>
-    </div>
-    <div class="prog-wrap" id="progWrap">
-      <div class="prog-top"><span id="progLbl">جاري...</span><span id="progPct">0%</span></div>
-      <div class="prog-bg"><div class="prog-fill" id="progFill"></div></div>
+      <div class="file-info" id="fileInfo">
+        <div class="file-icon-wrap">📗</div>
+        <div class="file-details">
+          <div class="file-name" id="fName">—</div>
+          <div class="file-meta" id="fMeta">—</div>
+        </div>
+        <div class="status-pill" id="fStatus">جاري</div>
+      </div>
+      <div class="prog-wrap" id="progWrap">
+        <div class="prog-labels"><span id="progLbl">جاري...</span><span id="progPct">0%</span></div>
+        <div class="prog-track"><div class="prog-bar" id="progBar"></div></div>
+      </div>
     </div>
   </div>
 
-  <!-- STATS -->
-  <div class="stats" id="statsRow">
-    <div class="stat"><div class="stat-n" id="sRows">0</div><div class="stat-l">إجمالي الصفوف</div></div>
-    <div class="stat"><div class="stat-n" id="sSheets">0</div><div class="stat-l">الأوراق</div></div>
-    <div class="stat"><div class="stat-n" id="sRes">—</div><div class="stat-l">نتائج البحث</div></div>
+  <div class="stats-row" id="statsRow">
+    <div class="stat-card"><div class="stat-value" id="sRows">0</div><div class="stat-label">إجمالي الصفوف</div></div>
+    <div class="stat-card"><div class="stat-value" id="sSheets">0</div><div class="stat-label">الأوراق</div></div>
+    <div class="stat-card"><div class="stat-value" id="sRes">—</div><div class="stat-label">نتائج البحث</div></div>
   </div>
 
-  <!-- SEARCH -->
   <div class="card">
-    <div class="sec-lbl">🔎 البحث عن الاسم الثلاثي</div>
-    <div class="srch-row">
-      <input class="srch-in" id="searchInput" type="text"
-        placeholder="الاسم الأول الثاني الثالث..."
-        oninput="onInput()" onkeydown="if(event.key==='Enter')doSearch()">
-      <button class="srch-btn" id="searchBtn" onclick="doSearch()" disabled>🔍</button>
+    <div class="card-head">
+      <div class="card-icon">🔎</div>
+      <div class="card-title">البحث عن الاسم الثلاثي</div>
     </div>
-
-    <div class="mode-info">
-      وضع البحث الحالي: <span class="mbadge" id="modeBadge">🎯 ترتيب دقيق</span>
-    </div>
-
-    <!-- FILTER PANEL -->
-    <div class="filter-bar" id="filterBar">
-
-      <div>
-        <div class="filter-title">⚙️ وضع البحث</div>
-        <div class="filter-row">
-          <button class="fchip active" id="modeExact" onclick="setMode('exact')">🎯 ترتيب دقيق</button>
-          <button class="fchip" id="modeAny"   onclick="setMode('any')"  >🔄 أي ترتيب</button>
-          <button class="fchip" id="modeStart" onclick="setMode('start')">▶️ يبدأ بـ</button>
+    <div class="card-body">
+      <div class="search-wrap">
+        <input class="search-input" id="searchInput" type="text" placeholder="الاسم الأول الثاني الثالث..." oninput="onInput()" onkeydown="if(event.key==='Enter')doSearch()">
+        <button class="search-btn" id="searchBtn" onclick="doSearch()" disabled>🔍</button>
+      </div>
+      <div class="mode-row">وضع البحث: <span class="mode-pill" id="modePill">🎯 ترتيب دقيق</span></div>
+      <div class="filter-panel" id="filterPanel">
+        <div>
+          <div class="filter-sec-title">⚙️ وضع البحث</div>
+          <div class="chips-wrap">
+            <button class="chip active" id="modeExact" onclick="setMode('exact')">🎯 ترتيب دقيق</button>
+            <button class="chip" id="modeAny" onclick="setMode('any')">🔄 أي ترتيب</button>
+            <button class="chip" id="modeStart" onclick="setMode('start')">▶️ يبدأ بـ</button>
+          </div>
+          <div class="mode-desc" id="modeDesc">🎯 <b>ترتيب دقيق:</b> يبحث بالترتيب المكتوب — الأول ثم الثاني ثم الثالث، في خلية واحدة أو خلايا متتالية بالصف</div>
         </div>
-        <div style="font-size:11px;color:var(--text2);margin-top:8px;line-height:1.7" id="modeDesc">
-          🎯 <b>ترتيب دقيق:</b> يبحث عن الأجزاء بالترتيب المكتوب بالضبط — الاسم الأول ثم الثاني ثم الثالث
+        <div>
+          <div class="filter-sec-title">📄 تحديد الورقة</div>
+          <div class="chips-wrap" id="sheetChips">
+            <button class="chip active" onclick="selectSheet('__all__',this)">كل الأوراق</button>
+          </div>
         </div>
       </div>
-
-      <div>
-        <div class="filter-title">📄 فلترة الأوراق</div>
-        <div id="sheetFilter" style="display:flex;flex-wrap:wrap;gap:7px">
-          <button class="schip active" onclick="toggleSheet('__all__',this)">الكل</button>
-        </div>
-      </div>
-
+      <button class="filter-toggle" onclick="toggleFilter()"><span id="fArrow">▼</span><span id="fTxt">خيارات الفلترة</span></button>
     </div>
-
-    <button class="tog-btn" onclick="toggleFilter()">
-      <span>⚙️</span><span id="filterBtnTxt">إظهار خيارات الفلترة</span>
-    </button>
   </div>
 
-  <!-- RESULTS -->
   <div class="card" id="resCard" style="display:none">
-    <div class="res-hdr">
-      <div class="res-title">📋 النتائج <span class="cnt-badge" id="cntBadge">0</span></div>
-      <button class="copy-all" onclick="copyAll()">📋 نسخ الكل</button>
+    <div class="res-header">
+      <div class="res-title">النتائج <span class="cnt-pill" id="cntPill">0</span></div>
+      <button class="copy-all-btn" onclick="copyAll()">📋 نسخ الكل</button>
     </div>
     <div class="res-list" id="resList"></div>
   </div>
 
-  <!-- EMPTY -->
   <div class="card" id="emptyCard">
-    <div class="empty">
-      <div class="em">📊</div>
-      <p>استورد ملف Excel<br>ثم ابحث عن الاسم الثلاثي</p>
+    <div class="empty-state">
+      <div class="empty-emoji">📊</div>
+      <div class="empty-text">استورد ملف Excel<br>ثم ابحث عن الاسم الثلاثي</div>
     </div>
   </div>
 
+</div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-let sheets = [], totalRows = 0, isDark = false;
-let searchMode = 'exact';
-let activeSheets = new Set(['__all__']);
+'use strict';
+let SHEETS=[],TOTAL_ROWS=0,DARK=false,MODE='exact',ACTIVE_SHEET='__all__';
 
-function toggleTheme(){
-  isDark=!isDark;
-  document.body.setAttribute('data-theme',isDark?'dark':'light');
-  document.getElementById('themeBtn').textContent=isDark?'☀️':'🌙';
-}
+function toggleTheme(){DARK=!DARK;document.body.setAttribute('data-theme',DARK?'dark':'light');document.getElementById('themeBtn').textContent=DARK?'☀️':'🌙';}
 
-function toast(msg,ms=2800){
-  const el=document.getElementById('toast');
-  el.textContent=msg;el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),ms);
-}
+let toastTimer;
+function showToast(msg,ms=2600){clearTimeout(toastTimer);const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');toastTimer=setTimeout(()=>el.classList.remove('show'),ms);}
 
-function fmtSize(b){
-  if(b<1024)return b+' B';
-  if(b<1048576)return (b/1024).toFixed(1)+' KB';
-  return (b/1048576).toFixed(1)+' MB';
-}
+function fmtSize(b){if(b<1024)return b+' B';if(b<1048576)return (b/1024).toFixed(1)+' KB';return (b/1048576).toFixed(1)+' MB';}
 
-function setProg(pct,lbl){
-  document.getElementById('progFill').style.width=Math.min(pct,100)+'%';
-  document.getElementById('progPct').textContent=Math.round(pct)+'%';
-  if(lbl)document.getElementById('progLbl').textContent=lbl;
-}
+function setProg(pct,lbl){document.getElementById('progBar').style.width=Math.min(pct,100)+'%';document.getElementById('progPct').textContent=Math.round(pct)+'%';if(lbl)document.getElementById('progLbl').textContent=lbl;}
 
-function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
-// ── تحميل الملف ──────────────────────────────────────────────────────
 async function loadFile(input){
-  const file=input.files[0]; if(!file)return;
-  sheets=[];totalRows=0;activeSheets=new Set(['__all__']);
+  const file=input.files[0];if(!file)return;
+  SHEETS=[];TOTAL_ROWS=0;ACTIVE_SHEET='__all__';
   document.getElementById('resCard').style.display='none';
   document.getElementById('emptyCard').style.display='block';
   document.getElementById('statsRow').classList.remove('show');
@@ -278,20 +232,19 @@ async function loadFile(input){
   document.getElementById('fileInfo').classList.add('show');
   document.getElementById('fName').textContent=file.name;
   document.getElementById('fMeta').textContent=fmtSize(file.size)+' • '+new Date(file.lastModified).toLocaleDateString('ar-SA');
-  document.getElementById('fStatus').textContent='يُحمَّل...';
+  document.getElementById('fStatus').textContent='يُحمَّل';
   document.getElementById('progWrap').classList.add('show');
   setProg(5,'قراءة الملف...');
-
   const reader=new FileReader();
   reader.onprogress=e=>{if(e.lengthComputable)setProg((e.loaded/e.total)*40,'تحميل البيانات...');};
   reader.onload=async e=>{
     try{
       setProg(45,'تحليل الملف...');await sleep(40);
-      const data=new Uint8Array(e.target.result);
+      const raw=new Uint8Array(e.target.result);
       setProg(55,'فتح المصنف...');await sleep(40);
       let wb;
-      try{wb=XLSX.read(data,{type:'array',cellText:true,cellDates:true});}
-      catch(_){wb=XLSX.read(new TextDecoder('utf-8',{fatal:false}).decode(data),{type:'string'});}
+      try{wb=XLSX.read(raw,{type:'array',cellText:true,cellDates:true});}
+      catch(_){wb=XLSX.read(new TextDecoder('utf-8',{fatal:false}).decode(raw),{type:'string'});}
       const names=wb.SheetNames;
       setProg(65,'معالجة الأوراق...');await sleep(40);
       for(let i=0;i<names.length;i++){
@@ -300,282 +253,244 @@ async function loadFile(input){
         const rows=[];
         for(const row of json){
           if(row.some(c=>c!==null&&c!==undefined&&String(c).trim()!=='')){
-            rows.push(row.map(c=>(c!==null&&c!==undefined?String(c).trim():'')));
-            totalRows++;
+            rows.push(row.map(c=>c!==null&&c!==undefined?String(c).trim():''));
+            TOTAL_ROWS++;
           }
         }
-        sheets.push({name:names[i],rows});
+        SHEETS.push({name:names[i],rows});
         setProg(65+((i+1)/names.length)*30,'ورقة: '+names[i]);
         await sleep(20);
       }
       setProg(100,'اكتمل ✅');
       document.getElementById('fStatus').textContent='✅ جاهز';
-      document.getElementById('sRows').textContent=totalRows.toLocaleString('ar');
+      document.getElementById('sRows').textContent=TOTAL_ROWS.toLocaleString('ar');
       document.getElementById('sSheets').textContent=names.length.toLocaleString('ar');
       document.getElementById('statsRow').classList.add('show');
       document.getElementById('searchBtn').disabled=false;
-      buildSheetFilter(names);
-      toast('✅ '+file.name+' — '+totalRows.toLocaleString('ar')+' صف');
-      setTimeout(()=>document.getElementById('progWrap').classList.remove('show'),900);
+      buildSheetChips(names);
+      showToast('✅ '+file.name+' — '+TOTAL_ROWS.toLocaleString('ar')+' صف');
+      setTimeout(()=>document.getElementById('progWrap').classList.remove('show'),1000);
     }catch(err){
       console.error(err);
       document.getElementById('fStatus').textContent='❌ خطأ';
-      toast('❌ فشل قراءة الملف.');
+      showToast('❌ فشل قراءة الملف');
       document.getElementById('progWrap').classList.remove('show');
     }
   };
   reader.readAsArrayBuffer(file);
 }
 
-// ── فلتر الأوراق ─────────────────────────────────────────────────────
-function buildSheetFilter(names){
-  const wrap=document.getElementById('sheetFilter');
-  wrap.innerHTML='<button class="schip active" onclick="toggleSheet(\'__all__\',this)">الكل</button>';
-  names.forEach(n=>{
-    const btn=document.createElement('button');
-    btn.className='schip';btn.textContent=n;
-    btn.onclick=()=>toggleSheet(n,btn);
-    wrap.appendChild(btn);
-  });
+function buildSheetChips(names){
+  const w=document.getElementById('sheetChips');
+  w.innerHTML='<button class="chip active" onclick="selectSheet(\'__all__\',this)">كل الأوراق</button>';
+  names.forEach(n=>{const b=document.createElement('button');b.className='chip';b.textContent=n;b.onclick=()=>selectSheet(n,b);w.appendChild(b);});
 }
 
-function toggleSheet(name,btn){
-  if(name==='__all__'){
-    activeSheets=new Set(['__all__']);
-    document.querySelectorAll('.schip').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-  }else{
-    activeSheets.delete('__all__');
-    document.querySelector('.schip').classList.remove('active');
-    if(btn.classList.contains('active')){
-      btn.classList.remove('active');activeSheets.delete(name);
-      if(activeSheets.size===0){activeSheets.add('__all__');document.querySelector('.schip').classList.add('active');}
-    }else{btn.classList.add('active');activeSheets.add(name);}
-  }
+function selectSheet(name,btn){
+  ACTIVE_SHEET=name;
+  document.querySelectorAll('#sheetChips .chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
 }
 
-// ── فتح/إغلاق الفلتر ─────────────────────────────────────────────────
+let filterOpen=false;
 function toggleFilter(){
-  const bar=document.getElementById('filterBar');
-  const show=bar.classList.toggle('show');
-  document.getElementById('filterBtnTxt').textContent=show?'إخفاء خيارات الفلترة':'إظهار خيارات الفلترة';
+  filterOpen=!filterOpen;
+  document.getElementById('filterPanel').classList.toggle('show',filterOpen);
+  document.getElementById('fArrow').textContent=filterOpen?'▲':'▼';
+  document.getElementById('fTxt').textContent=filterOpen?'إخفاء الخيارات':'خيارات الفلترة';
 }
 
-// ── وضع البحث ────────────────────────────────────────────────────────
-const modeLabels={
-  exact:'🎯 ترتيب دقيق',
-  any:'🔄 أي ترتيب',
-  start:'▶️ يبدأ بـ'
-};
-const modeDescs={
-  exact:'🎯 <b>ترتيب دقيق:</b> يبحث عن الأجزاء بالترتيب المكتوب بالضبط — الاسم الأول ثم الثاني ثم الثالث',
-  any:'🔄 <b>أي ترتيب:</b> يبحث عن الأجزاء الثلاثة بأي ترتيب كان في السطر',
-  start:'▶️ <b>يبدأ بـ:</b> يبحث عن السجلات التي تبدأ بالاسم الأول المكتوب'
+const MODES={
+  exact:{pill:'🎯 ترتيب دقيق',desc:'🎯 <b>ترتيب دقيق:</b> يبحث بالترتيب المكتوب — الأول ثم الثاني ثم الثالث، في خلية واحدة أو خلايا متتالية بالصف'},
+  any:{pill:'🔄 أي ترتيب',desc:'🔄 <b>أي ترتيب:</b> يبحث عن الكلمات في أي مكان وأي ترتيب داخل الصف'},
+  start:{pill:'▶️ يبدأ بـ',desc:'▶️ <b>يبدأ بـ:</b> يجلب الصفوف التي تبدأ بالكلمة الأولى ثم تحتوي الباقي'}
 };
 
-function setMode(mode){
-  searchMode=mode;
-  ['exact','any','start'].forEach(m=>{
-    document.getElementById('mode'+m.charAt(0).toUpperCase()+m.slice(1)).classList.toggle('active',m===mode);
-  });
-  document.getElementById('modeBadge').textContent=modeLabels[mode];
-  document.getElementById('modeDesc').innerHTML=modeDescs[mode];
+function setMode(m){
+  MODE=m;
+  ['exact','any','start'].forEach(x=>document.getElementById('mode'+x.charAt(0).toUpperCase()+x.slice(1)).classList.toggle('active',x===m));
+  document.getElementById('modePill').textContent=MODES[m].pill;
+  document.getElementById('modeDesc').innerHTML=MODES[m].desc;
 }
 
 function onInput(){
   const v=document.getElementById('searchInput').value.trim();
-  document.getElementById('searchBtn').disabled=sheets.length===0||v.length===0;
+  document.getElementById('searchBtn').disabled=SHEETS.length===0||v.length===0;
 }
 
-// ── تطبيع النص العربي ────────────────────────────────────────────────
+/* ── تطبيع النص العربي ── */
 function norm(t){
-  return t.replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/\s+/g,' ').trim().toLowerCase();
+  return t
+    .replace(/[أإآا]/g,'ا')
+    .replace(/ة/g,'ه')
+    .replace(/ى/g,'ي')
+    .replace(/[\u064B-\u065F]/g,'')
+    .replace(/\s+/g,' ')
+    .trim()
+    .toLowerCase();
 }
 
-// ── دالة المطابقة الأساسية ───────────────────────────────────────────
-// تبحث عن الاسم الثلاثي بالترتيب المحدد
-function matchRow(parts, row){
-  const normParts = parts.map(norm);
+/* ══════════════════════════════════════════
+   محرك البحث الدقيق
+══════════════════════════════════════════ */
+function matchRow(qWords,row){
+  const normRow=row.map(c=>norm(c));
 
-  // ── 1) بحث في خلية واحدة تحتوي الاسم الثلاثي كاملاً
-  for(const cell of row){
-    if(!cell) continue;
-    const nc = norm(cell);
+  /* 1) خلية واحدة تحتوي الاسم الثلاثي */
+  for(let ci=0;ci<row.length;ci++){
+    const nc=normRow[ci];
+    if(!nc)continue;
+    if(matchCell(qWords,nc))return{matched:row[ci],ci};
+  }
 
-    if(searchMode === 'exact'){
-      // الأجزاء موجودة بالترتيب المكتوب تماماً (الأول ثم الثاني ثم الثالث)
-      let pos=0, ok=true;
-      for(const p of normParts){
-        const idx=nc.indexOf(p,pos);
-        if(idx===-1){ok=false;break;}
-        pos=idx+p.length;
+  /* 2) كلمات موزّعة على خلايا متتالية بالترتيب */
+  if(MODE==='exact'||MODE==='start'){
+    const nonEmpty=normRow.map((nc,i)=>({nc,i})).filter(x=>x.nc.length>0);
+    for(let si=0;si<=nonEmpty.length-qWords.length;si++){
+      let ok=true;
+      for(let wi=0;wi<qWords.length;wi++){
+        if(!nonEmpty[si+wi].nc.includes(qWords[wi])){ok=false;break;}
       }
-      if(ok) return cell;
-
-    }else if(searchMode === 'any'){
-      // جميع الأجزاء موجودة بأي ترتيب
-      if(normParts.every(p=>nc.includes(p))) return cell;
-
-    }else if(searchMode === 'start'){
-      // الخلية تبدأ بالجزء الأول وتحتوي الباقي
-      if(nc.startsWith(normParts[0]) && normParts.slice(1).every(p=>nc.includes(p))) return cell;
+      if(ok){
+        const combined=nonEmpty.slice(si,si+qWords.length).map(x=>row[x.i]).join(' ');
+        return{matched:combined,ci:nonEmpty[si].i};
+      }
     }
   }
 
-  // ── 2) بحث عبر خلايا متعددة في الصف بالترتيب (كل جزء في خلية منفصلة)
-  if(searchMode === 'exact' || searchMode === 'start'){
-    const nonEmpty = row.filter(c=>c&&c.trim()!=='');
-    const normCells = nonEmpty.map(c=>norm(c));
-    for(let ci=0; ci<=normCells.length-normParts.length; ci++){
-      let match=true;
-      for(let pi=0; pi<normParts.length; pi++){
-        // كل جزء يجب أن يكون موجوداً في الخلية المقابلة بالترتيب
-        if(!normCells[ci+pi].includes(normParts[pi])){match=false;break;}
+  /* 3) أي ترتيب عبر أي خلايا */
+  if(MODE==='any'){
+    const nonEmpty=normRow.map((nc,i)=>({nc,i})).filter(x=>x.nc.length>0);
+    const used=new Set();
+    const idxs=[];
+    for(const w of qWords){
+      let found=false;
+      for(const {nc,i} of nonEmpty){
+        if(!used.has(i)&&nc.includes(w)){idxs.push(i);used.add(i);found=true;break;}
       }
-      if(match) return nonEmpty.slice(ci, ci+normParts.length).join(' ');
+      if(!found)return null;
     }
-  }
-
-  // ── 3) للوضع "أي ترتيب" — ابحث عن الأجزاء في أي خلايا من الصف
-  if(searchMode === 'any'){
-    const nonEmpty = row.filter(c=>c&&c.trim()!=='');
-    const normCells = nonEmpty.map(c=>norm(c));
-    const matched = [];
-    for(const p of normParts){
-      const idx = normCells.findIndex(nc=>nc.includes(p));
-      if(idx===-1){matched.length=0;break;}
-      matched.push(nonEmpty[idx]);
-    }
-    if(matched.length===normParts.length) return matched.join(' ');
+    return{matched:idxs.map(i=>row[i]).join(' '),ci:idxs[0]};
   }
 
   return null;
 }
 
-// ── البحث الرئيسي ────────────────────────────────────────────────────
+function matchCell(words,nc){
+  if(MODE==='exact'){
+    let pos=0;
+    for(const w of words){const idx=nc.indexOf(w,pos);if(idx===-1)return false;pos=idx+w.length;}
+    return true;
+  }
+  if(MODE==='any')return words.every(w=>nc.includes(w));
+  if(MODE==='start')return nc.startsWith(words[0])&&words.slice(1).every(w=>nc.includes(w));
+  return false;
+}
+
+/* ══════════════════════════════════════════
+   البحث الرئيسي
+══════════════════════════════════════════ */
 async function doSearch(){
-  const query=document.getElementById('searchInput').value.trim();
-  if(!query||sheets.length===0)return;
-
-  const parts=query.split(/\s+/).filter(p=>p.length>0);
-  if(parts.length===0)return;
-
+  const raw=document.getElementById('searchInput').value.trim();
+  if(!raw||SHEETS.length===0)return;
+  const qWords=raw.split(/\s+/).filter(w=>w.length>0).map(norm);
+  if(!qWords.length)return;
   const results=[];
   document.getElementById('emptyCard').style.display='none';
   document.getElementById('resCard').style.display='none';
   document.getElementById('progWrap').classList.add('show');
   setProg(0,'جاري البحث...');
-  await sleep(30);
-
-  const targets=activeSheets.has('__all__')?sheets:sheets.filter(s=>activeSheets.has(s.name));
-
+  await sleep(25);
+  const targets=ACTIVE_SHEET==='__all__'?SHEETS:SHEETS.filter(s=>s.name===ACTIVE_SHEET);
   for(let si=0;si<targets.length;si++){
-    const sheet=targets[si];
-    for(const row of sheet.rows){
-      const matched=matchRow(parts,row);
-      if(matched){
-        results.push({name:matched, sheet:sheet.name, row:row});
-      }
+    for(const row of targets[si].rows){
+      const res=matchRow(qWords,row);
+      if(res)results.push({name:res.matched,sheet:targets[si].name,row});
     }
-    setProg(((si+1)/targets.length)*100,'بحث في: '+sheet.name);
-    await sleep(15);
+    setProg(((si+1)/targets.length)*100,'بحث في: '+targets[si].name);
+    await sleep(12);
   }
-
   setProg(100,'اكتمل ✅');
   setTimeout(()=>document.getElementById('progWrap').classList.remove('show'),700);
   document.getElementById('sRes').textContent=results.length.toLocaleString('ar');
-  renderResults(results,parts);
+  renderResults(results,raw.split(/\s+/).filter(w=>w.length>0));
 }
 
-// ── عرض النتائج ──────────────────────────────────────────────────────
-function renderResults(results,parts){
+/* ══════════════════════════════════════════
+   عرض النتائج
+══════════════════════════════════════════ */
+function renderResults(results,qWords){
   const list=document.getElementById('resList');
   const card=document.getElementById('resCard');
   list.innerHTML='';
-  document.getElementById('cntBadge').textContent=results.length;
+  document.getElementById('cntPill').textContent=results.length;
   card.style.display='block';
-
-  if(results.length===0){
-    list.innerHTML=`<div class="empty"><div class="em">🔍</div>
-      <p>لا توجد نتائج<br>جرّب تغيير وضع البحث أو تقليل الأجزاء</p></div>`;
+  if(!results.length){
+    list.innerHTML='<div class="empty-state"><div class="empty-emoji">🔍</div><div class="empty-text">لا توجد نتائج<br>جرّب تغيير وضع البحث</div></div>';
     return;
   }
-
-  const normParts=parts.map(norm);
-
+  const nq=qWords.map(norm);
   results.forEach((r,i)=>{
-    // كامل محتوى السطر (بدون فراغات)
-    const fullRow=r.row.filter(c=>c&&c.trim()!=='');
-    const fullRowText=fullRow.join(' | ');
-
-    // عرض كل خلية من السطر مع تمييز المتطابقة
-    const cellsHtml=fullRow.map(cell=>{
-      const nc=norm(cell);
-      const isHit=normParts.some(p=>nc.includes(p));
-      return `<span class="cell-box ${isHit?'hit':''}">${esc(cell)}</span>`;
+    const cells=r.row.filter(c=>c&&c.trim()!=='');
+    const copyText=cells.join(' | ');
+    const cellsHtml=cells.map(c=>{
+      const isHit=nq.some(w=>norm(c).includes(w));
+      return '<span class="cell '+(isHit?'matched':'')+'">'+esc(c)+'</span>';
     }).join('');
-
     const div=document.createElement('div');
     div.className='res-item';
-    div.dataset.copy=fullRowText;
-
-    div.innerHTML=`
-      <button class="copy-btn" onclick="copyItem(this,event)">📋</button>
-      <div class="res-name">${hlName(r.name,parts)}</div>
-      <div class="res-tags">
-        <span class="tag">📄 ${esc(r.sheet)}</span>
-        <span class="tag"># ${i+1}</span>
-      </div>
-      <div class="row-full">${cellsHtml}</div>
-    `;
+    div.style.animationDelay=(i*35)+'ms';
+    div.dataset.copy=copyText;
+    div.innerHTML=
+      '<button class="copy-btn" onclick="copyItem(this,event)">📋</button>'+
+      '<div class="res-name">'+hlName(r.name,qWords)+'</div>'+
+      '<div class="res-tags">'+
+        '<span class="rtag">📄 '+esc(r.sheet)+'</span>'+
+        '<span class="rtag"># '+(i+1)+'</span>'+
+      '</div>'+
+      '<div class="row-cells">'+cellsHtml+'</div>';
     list.appendChild(div);
   });
+  setTimeout(()=>document.getElementById('resCard').scrollIntoView({behavior:'smooth',block:'start'}),100);
 }
 
-// ── تمييز الاسم ──────────────────────────────────────────────────────
-function hlName(text,parts){
-  let result=esc(text);
-  parts.forEach(part=>{
-    const escaped=esc(part);
-    const re=new RegExp(escaped,'gi');
-    result=result.replace(re,m=>`<mark>${m}</mark>`);
+function hlName(text,words){
+  let r=esc(text);
+  words.forEach(w=>{
+    if(!w)return;
+    try{r=r.replace(new RegExp(escRe(esc(w)),'gi'),m=>'<mark>'+m+'</mark>');}catch(_){}
   });
-  return result;
+  return r;
 }
+function escRe(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-function esc(t){
-  return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// ── النسخ ────────────────────────────────────────────────────────────
 function copyItem(btn,e){
   e.stopPropagation();
   writeClip(btn.closest('.res-item').dataset.copy);
   btn.textContent='✅';btn.classList.add('done');
-  setTimeout(()=>{btn.textContent='📋';btn.classList.remove('done');},2200);
+  setTimeout(()=>{btn.textContent='📋';btn.classList.remove('done');},2000);
 }
 
 function copyAll(){
   const items=[...document.querySelectorAll('.res-item')];
-  writeClip(items.map((el,i)=>`${i+1}. ${el.dataset.copy}`).join('\n\n'));
-  toast('✅ تم نسخ '+items.length+' نتيجة');
+  writeClip(items.map((el,i)=>(i+1)+'. '+el.dataset.copy).join('\n\n'));
+  showToast('✅ تم نسخ '+items.length+' نتيجة');
 }
 
 function writeClip(text){
-  if(navigator.clipboard){
-    navigator.clipboard.writeText(text).then(()=>toast('✅ تم النسخ!'));
-  }else{
-    const ta=document.createElement('textarea');
-    ta.value=text;ta.style.cssText='position:fixed;opacity:0';
-    document.body.appendChild(ta);ta.select();
-    document.execCommand('copy');document.body.removeChild(ta);
-    toast('✅ تم النسخ!');
-  }
+  if(navigator.clipboard){navigator.clipboard.writeText(text).then(()=>showToast('✅ تم النسخ!')).catch(()=>fbCopy(text));}
+  else{fbCopy(text);}
 }
 
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+function fbCopy(text){
+  const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0;top:0;left:0';
+  document.body.appendChild(ta);ta.focus();ta.select();
+  try{document.execCommand('copy');showToast('✅ تم النسخ!');}catch(_){showToast('❌ فشل النسخ');}
+  document.body.removeChild(ta);
 }
+
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}
 </script>
 </body>
 </html>
