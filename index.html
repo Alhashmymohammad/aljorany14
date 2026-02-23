@@ -8,465 +8,133 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Aljorany">
-<link rel="manifest" href="/manifest.json">
+<link rel="manifest" href="manifest.json">
 <title>Aljorany - البحث في ملفات Excel</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-  :root {
-    --bg: #f0f4ff;
-    --surface: #ffffff;
-    --surface2: #f8f9ff;
-    --primary: #6c63ff;
-    --primary2: #a78bfa;
-    --accent: #06b6d4;
-    --text: #1e1b4b;
-    --text2: #6b7280;
-    --border: #e5e7eb;
-    --shadow: rgba(108,99,255,0.15);
-    --card-bg: #fff;
-    --result-bg: #f5f3ff;
-    --result-border: #6c63ff;
-    --progress-bg: #e0e7ff;
-    --success: #10b981;
-  }
-  [data-theme="dark"] {
-    --bg: #0f0f1a;
-    --surface: #1a1a2e;
-    --surface2: #16213e;
-    --primary: #7c73ff;
-    --primary2: #a78bfa;
-    --accent: #22d3ee;
-    --text: #e0e7ff;
-    --text2: #9ca3af;
-    --border: #2d2d4e;
-    --shadow: rgba(124,115,255,0.25);
-    --card-bg: #1e1e35;
-    --result-bg: #1a1a35;
-    --result-border: #7c73ff;
-    --progress-bg: #1e1b4b;
-    --success: #34d399;
-  }
+:root {
+  --bg:#f0f4ff;--surface:#fff;--surface2:#f8f9ff;
+  --primary:#6c63ff;--primary2:#a78bfa;--accent:#06b6d4;
+  --text:#1e1b4b;--text2:#6b7280;--border:#e5e7eb;
+  --shadow:rgba(108,99,255,.15);--card:#fff;
+  --res-bg:#f5f3ff;--prog-bg:#e0e7ff;--ok:#10b981;
+}
+[data-theme="dark"]{
+  --bg:#0f0f1a;--surface:#1a1a2e;--surface2:#16213e;
+  --primary:#7c73ff;--primary2:#a78bfa;--accent:#22d3ee;
+  --text:#e0e7ff;--text2:#9ca3af;--border:#2d2d4e;
+  --shadow:rgba(124,115,255,.25);--card:#1e1e35;
+  --res-bg:#1a1a35;--prog-bg:#1e1b4b;--ok:#34d399;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:all .3s}
 
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+.hdr{background:linear-gradient(135deg,#6c63ff,#a855f7,#06b6d4);padding:22px 18px 32px;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.08);top:-100px;right:-70px}
+.hdr-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
+.app-name{font-size:30px;font-weight:900;color:#fff;letter-spacing:2px;text-shadow:0 2px 15px rgba(0,0,0,.3)}
+.app-sub{font-size:12px;color:rgba(255,255,255,.85);margin-top:4px;position:relative;z-index:1}
+.theme-btn{width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.2);color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;flex-shrink:0}
+.theme-btn:active{transform:scale(.9)}
 
-  body {
-    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    transition: all 0.3s ease;
-    overflow-x: hidden;
-  }
+.main{padding:18px 14px 50px;max-width:640px;margin:0 auto}
 
-  /* ===== HEADER ===== */
-  .header {
-    background: linear-gradient(135deg, #6c63ff 0%, #a855f7 50%, #06b6d4 100%);
-    padding: 24px 20px 35px;
-    position: relative;
-    overflow: hidden;
-  }
-  .header::before {
-    content: '';
-    position: absolute;
-    width: 300px; height: 300px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.08);
-    top: -100px; right: -80px;
-  }
-  .header::after {
-    content: '';
-    position: absolute;
-    width: 200px; height: 200px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.06);
-    bottom: -80px; left: -60px;
-  }
-  .header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    position: relative;
-    z-index: 1;
-  }
-  .app-name {
-    font-size: 32px;
-    font-weight: 900;
-    color: white;
-    text-shadow: 0 2px 15px rgba(0,0,0,0.3);
-    letter-spacing: 2px;
-  }
-  .app-subtitle {
-    font-size: 13px;
-    color: rgba(255,255,255,0.85);
-    margin-top: 4px;
-    position: relative;
-    z-index: 1;
-  }
-  .theme-btn {
-    width: 46px; height: 46px;
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.45);
-    background: rgba(255,255,255,0.2);
-    color: white;
-    font-size: 22px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s;
-    flex-shrink: 0;
-  }
-  .theme-btn:active { transform: scale(0.92); }
+.card{background:var(--card);border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:0 4px 20px var(--shadow);border:1px solid var(--border);transition:all .3s}
+.sec-lbl{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:11px;display:flex;align-items:center;gap:5px}
 
-  /* ===== MAIN ===== */
-  .main {
-    padding: 20px 16px 40px;
-    max-width: 640px;
-    margin: 0 auto;
-  }
+.imp-btn{width:100%;padding:18px;border-radius:14px;border:2.5px dashed var(--primary);background:linear-gradient(135deg,rgba(108,99,255,.06),rgba(167,139,250,.06));color:var(--primary);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:all .3s}
+.imp-btn:active{transform:scale(.98)}
+#fileInput{display:none}
+.fmt-hint{font-size:11px;color:var(--text2);text-align:center;margin-top:7px}
 
-  /* ===== CARD ===== */
-  .card {
-    background: var(--card-bg);
-    border-radius: 22px;
-    padding: 20px;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 24px var(--shadow);
-    border: 1px solid var(--border);
-    transition: all 0.3s;
-  }
+.file-info{display:none;align-items:center;gap:11px;padding:13px;background:var(--res-bg);border-radius:13px;border:1px solid var(--border);margin-top:11px}
+.file-info.show{display:flex}
+.f-ico{font-size:32px;flex-shrink:0}
+.f-det{flex:1;min-width:0}
+.f-name{font-weight:700;font-size:13px;word-break:break-all}
+.f-meta{font-size:11px;color:var(--text2);margin-top:2px}
+.s-badge{font-size:11px;font-weight:700;padding:4px 11px;border-radius:20px;background:linear-gradient(135deg,#6c63ff,#a855f7);color:#fff;white-space:nowrap;flex-shrink:0}
 
-  .section-label {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text2);
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+.prog-wrap{display:none;margin-top:13px}
+.prog-wrap.show{display:block}
+.prog-top{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px}
+.prog-bg{height:11px;background:var(--prog-bg);border-radius:11px;overflow:hidden}
+.prog-fill{height:100%;border-radius:11px;background:linear-gradient(90deg,#6c63ff,#a855f7,#06b6d4,#6c63ff);background-size:300% 100%;animation:gm 2s linear infinite;transition:width .4s ease;width:0%}
+@keyframes gm{0%{background-position:0% 50%}100%{background-position:300% 50%}}
 
-  /* ===== IMPORT BUTTON ===== */
-  .import-btn {
-    width: 100%;
-    padding: 20px;
-    border-radius: 16px;
-    border: 2.5px dashed var(--primary);
-    background: linear-gradient(135deg, rgba(108,99,255,0.06), rgba(167,139,250,0.06));
-    color: var(--primary);
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: all 0.3s;
-  }
-  .import-btn:active {
-    background: linear-gradient(135deg, rgba(108,99,255,0.18), rgba(167,139,250,0.18));
-    transform: scale(0.98);
-  }
-  .import-btn .btn-icon { font-size: 26px; }
-  #fileInput { display: none; }
+.stats{display:none;gap:10px;margin-bottom:14px}
+.stats.show{display:flex}
+.stat{flex:1;background:var(--card);border:1px solid var(--border);border-radius:13px;padding:11px 7px;text-align:center;box-shadow:0 2px 10px var(--shadow)}
+.stat-n{font-size:22px;font-weight:900;background:linear-gradient(135deg,#6c63ff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-l{font-size:10px;color:var(--text2);margin-top:2px;font-weight:600}
 
-  .formats-hint {
-    font-size: 11px;
-    color: var(--text2);
-    text-align: center;
-    margin-top: 8px;
-    line-height: 1.6;
-  }
+.srch-row{display:flex;gap:9px;align-items:center}
+.srch-in{flex:1;padding:14px 16px;border-radius:13px;border:2px solid var(--border);background:var(--surface2);color:var(--text);font-size:16px;outline:none;transition:all .3s;font-family:inherit;direction:rtl}
+.srch-in:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(108,99,255,.12);background:var(--surface)}
+.srch-in::placeholder{color:var(--text2)}
+.srch-btn{width:52px;height:52px;border-radius:13px;border:none;background:linear-gradient(135deg,#6c63ff,#a855f7);color:#fff;font-size:21px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;flex-shrink:0}
+.srch-btn:active{transform:scale(.92)}
+.srch-btn:disabled{opacity:.4;cursor:not-allowed}
 
-  /* ===== FILE INFO ===== */
-  .file-info {
-    display: none;
-    align-items: center;
-    gap: 12px;
-    padding: 14px;
-    background: var(--result-bg);
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    margin-top: 12px;
-  }
-  .file-info.show { display: flex; }
-  .file-emoji { font-size: 34px; flex-shrink: 0; }
-  .file-details { flex: 1; min-width: 0; }
-  .file-name-text {
-    font-weight: 700;
-    font-size: 14px;
-    word-break: break-all;
-    color: var(--text);
-  }
-  .file-meta-text {
-    font-size: 11px;
-    color: var(--text2);
-    margin-top: 3px;
-  }
-  .status-badge {
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 12px;
-    border-radius: 20px;
-    background: linear-gradient(135deg, #6c63ff, #a855f7);
-    color: white;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
+/* FILTER */
+.filter-bar{display:none;margin-top:13px;flex-direction:column;gap:12px;border-top:1px solid var(--border);padding-top:13px}
+.filter-bar.show{display:flex}
+.filter-title{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+.filter-row{display:flex;flex-wrap:wrap;gap:7px}
+.fchip{padding:8px 15px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text2);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit}
+.fchip.active{background:linear-gradient(135deg,#6c63ff,#a855f7);color:#fff;border-color:transparent;box-shadow:0 3px 10px rgba(108,99,255,.35)}
+.fchip:active{transform:scale(.95)}
+.schip{padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
+.schip.active{background:var(--accent);color:#fff;border-color:transparent}
 
-  /* ===== PROGRESS ===== */
-  .progress-wrap { display: none; margin-top: 14px; }
-  .progress-wrap.show { display: block; }
-  .progress-top {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text2);
-    margin-bottom: 7px;
-  }
-  .progress-bg {
-    height: 12px;
-    background: var(--progress-bg);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    border-radius: 12px;
-    background: linear-gradient(90deg, #6c63ff, #a855f7, #06b6d4, #6c63ff);
-    background-size: 300% 100%;
-    animation: gradMove 2s linear infinite;
-    transition: width 0.4s ease;
-    width: 0%;
-  }
-  @keyframes gradMove {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 300% 50%; }
-  }
+.mode-info{font-size:11px;color:var(--text2);text-align:center;margin-top:9px;padding:7px;background:var(--surface2);border-radius:9px;line-height:1.6}
+.mbadge{display:inline-block;background:linear-gradient(135deg,#6c63ff,#a855f7);color:#fff;padding:2px 9px;border-radius:10px;font-weight:700;font-size:10px}
 
-  /* ===== STATS ===== */
-  .stats-row {
-    display: none;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-  .stats-row.show { display: flex; }
-  .stat-box {
-    flex: 1;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 12px 8px;
-    text-align: center;
-    box-shadow: 0 2px 10px var(--shadow);
-  }
-  .stat-number {
-    font-size: 24px;
-    font-weight: 900;
-    background: linear-gradient(135deg, #6c63ff, #a855f7);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .stat-label { font-size: 11px; color: var(--text2); margin-top: 2px; font-weight: 600; }
+.tog-btn{width:100%;margin-top:11px;padding:10px;border-radius:11px;border:1.5px solid var(--border);background:var(--surface2);color:var(--primary);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:inherit;transition:all .2s}
+.tog-btn:active{transform:scale(.98)}
 
-  /* ===== SEARCH ===== */
-  .search-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
-  .search-input {
-    flex: 1;
-    padding: 15px 18px;
-    border-radius: 14px;
-    border: 2px solid var(--border);
-    background: var(--surface2);
-    color: var(--text);
-    font-size: 16px;
-    outline: none;
-    transition: all 0.3s;
-    font-family: inherit;
-    direction: rtl;
-  }
-  .search-input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(108,99,255,0.12);
-    background: var(--surface);
-  }
-  .search-input::placeholder { color: var(--text2); }
-  .search-btn {
-    width: 54px; height: 54px;
-    border-radius: 14px;
-    border: none;
-    background: linear-gradient(135deg, #6c63ff, #a855f7);
-    color: white;
-    font-size: 22px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.3s;
-    flex-shrink: 0;
-  }
-  .search-btn:active { transform: scale(0.92); }
-  .search-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .search-hint {
-    font-size: 11px;
-    color: var(--text2);
-    text-align: center;
-    margin-top: 8px;
-  }
+/* RESULTS */
+.res-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}
+.res-title{font-size:14px;font-weight:800;display:flex;align-items:center;gap:7px}
+.cnt-badge{background:linear-gradient(135deg,#6c63ff,#a855f7);color:#fff;font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px}
+.copy-all{padding:7px 14px;border-radius:9px;border:none;background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.copy-all:active{transform:scale(.95)}
 
-  /* ===== RESULTS HEADER ===== */
-  .results-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 14px;
-  }
-  .results-title {
-    font-size: 15px;
-    font-weight: 800;
-    color: var(--text);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .count-badge {
-    background: linear-gradient(135deg, #6c63ff, #a855f7);
-    color: white;
-    font-size: 12px;
-    font-weight: 700;
-    padding: 3px 12px;
-    border-radius: 20px;
-  }
-  .copy-all-btn {
-    padding: 8px 16px;
-    border-radius: 10px;
-    border: none;
-    background: linear-gradient(135deg, #10b981, #06b6d4);
-    color: white;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .copy-all-btn:active { transform: scale(0.95); }
+.res-list{display:flex;flex-direction:column;gap:11px}
+.res-item{background:var(--res-bg);border:1.5px solid var(--border);border-right:5px solid var(--primary);border-radius:15px;padding:14px 14px 14px 48px;position:relative;animation:si .25s ease}
+@keyframes si{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:translateY(0)}}
 
-  /* ===== RESULT CARD ===== */
-  .results-list { display: flex; flex-direction: column; gap: 12px; }
+.res-name{font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px;line-height:1.5}
+.res-name mark{background:linear-gradient(135deg,rgba(108,99,255,.25),rgba(168,85,247,.25));color:var(--primary);border-radius:4px;padding:0 3px;font-weight:900}
 
-  .result-item {
-    background: var(--result-bg);
-    border: 1.5px solid var(--border);
-    border-right: 5px solid var(--primary);
-    border-radius: 16px;
-    padding: 15px 16px 15px 50px;
-    position: relative;
-    animation: slideIn 0.25s ease;
-    transition: all 0.2s;
-  }
-  .result-item:active { transform: scale(0.98); }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .result-main-name {
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--text);
-    line-height: 1.4;
-    margin-bottom: 8px;
-  }
-  .result-main-name mark {
-    background: linear-gradient(135deg, rgba(108,99,255,0.22), rgba(168,85,247,0.22));
-    color: var(--primary);
-    border-radius: 4px;
-    padding: 0 3px;
-  }
-  .result-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 8px;
-  }
-  .tag {
-    font-size: 11px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    background: rgba(108,99,255,0.1);
-    color: var(--primary2);
-    font-weight: 700;
-  }
-  .result-extra {
-    font-size: 12px;
-    color: var(--text2);
-    line-height: 1.8;
-    border-top: 1px solid var(--border);
-    padding-top: 8px;
-    margin-top: 4px;
-  }
-  .copy-item-btn {
-    position: absolute;
-    top: 14px;
-    left: 14px;
-    width: 34px; height: 34px;
-    border-radius: 10px;
-    border: none;
-    background: rgba(108,99,255,0.1);
-    color: var(--primary);
-    font-size: 16px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-  }
-  .copy-item-btn.done { background: var(--success); color: white; }
+.res-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
+.tag{font-size:10px;padding:2px 9px;border-radius:20px;background:rgba(108,99,255,.1);color:var(--primary2);font-weight:700}
 
-  /* ===== EMPTY STATE ===== */
-  .empty-box {
-    text-align: center;
-    padding: 50px 20px;
-    color: var(--text2);
-  }
-  .empty-box .big-emoji { font-size: 56px; margin-bottom: 14px; }
-  .empty-box p { font-size: 15px; line-height: 1.7; }
+/* كل محتوى السطر */
+.row-full{border-top:1px dashed var(--border);padding-top:9px;margin-top:4px;display:flex;flex-wrap:wrap;gap:5px}
+.cell-box{padding:4px 10px;border-radius:8px;font-size:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);line-height:1.5;max-width:100%;word-break:break-word}
+.cell-box.hit{background:linear-gradient(135deg,rgba(108,99,255,.18),rgba(168,85,247,.18));border-color:var(--primary);color:var(--primary);font-weight:700}
 
-  /* ===== TOAST ===== */
-  .toast {
-    position: fixed;
-    bottom: 28px;
-    left: 50%;
-    transform: translateX(-50%) translateY(120px);
-    background: #1e1e35;
-    color: white;
-    padding: 13px 28px;
-    border-radius: 30px;
-    font-size: 14px;
-    font-weight: 600;
-    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
-    z-index: 9999;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.45);
-    white-space: nowrap;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
+.copy-btn{position:absolute;top:13px;left:13px;width:32px;height:32px;border-radius:9px;border:none;background:rgba(108,99,255,.1);color:var(--primary);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.copy-btn.done{background:var(--ok);color:#fff}
 
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+.empty{text-align:center;padding:45px 15px;color:var(--text2)}
+.empty .em{font-size:52px;margin-bottom:13px}
+.empty p{font-size:14px;line-height:1.7}
+
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(120px);background:#1e1e35;color:#fff;padding:12px 26px;border-radius:30px;font-size:13px;font-weight:600;transition:transform .35s cubic-bezier(.34,1.56,.64,1);z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,.45);white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
 </style>
 </head>
 <body data-theme="light">
 
-<!-- HEADER -->
-<div class="header">
-  <div class="header-top">
+<div class="hdr">
+  <div class="hdr-top">
     <div>
       <div class="app-name">🔍 Aljorany</div>
-      <div class="app-subtitle">الجوراني — البحث الذكي في ملفات Excel</div>
+      <div class="app-sub">الجوراني — البحث الذكي في ملفات Excel</div>
     </div>
     <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
   </div>
@@ -474,377 +142,439 @@
 
 <div class="main">
 
-  <!-- IMPORT CARD -->
+  <!-- IMPORT -->
   <div class="card">
-    <div class="section-label">📂 استيراد ملف Excel</div>
-    <input type="file" id="fileInput"
-      accept=".xlsx,.xls,.xlsm,.xlsb,.xltx,.xltm,.ods,.csv"
-      onchange="loadFile(this)">
-    <button class="import-btn" onclick="document.getElementById('fileInput').click()">
-      <span class="btn-icon">📊</span>
-      <span>اضغط لاختيار الملف</span>
+    <div class="sec-lbl">📂 استيراد ملف Excel</div>
+    <input type="file" id="fileInput" accept=".xlsx,.xls,.xlsm,.xlsb,.xltx,.xltm,.ods,.csv" onchange="loadFile(this)">
+    <button class="imp-btn" onclick="document.getElementById('fileInput').click()">
+      <span style="font-size:24px">📊</span><span>اضغط لاختيار الملف</span>
     </button>
-    <p class="formats-hint">
-      يدعم جميع الامتدادات: xlsx · xls · xlsm · xlsb · xltx · xltm · ods · csv
-    </p>
-
-    <!-- File Info -->
+    <p class="fmt-hint">xlsx · xls · xlsm · xlsb · xltx · xltm · ods · csv</p>
     <div class="file-info" id="fileInfo">
-      <div class="file-emoji">📗</div>
-      <div class="file-details">
-        <div class="file-name-text" id="fName">—</div>
-        <div class="file-meta-text" id="fMeta">—</div>
+      <div class="f-ico">📗</div>
+      <div class="f-det">
+        <div class="f-name" id="fName">—</div>
+        <div class="f-meta" id="fMeta">—</div>
       </div>
-      <div class="status-badge" id="fStatus">جاري...</div>
+      <div class="s-badge" id="fStatus">جاري...</div>
     </div>
-
-    <!-- Progress -->
-    <div class="progress-wrap" id="progWrap">
-      <div class="progress-top">
-        <span id="progLabel">جاري المعالجة...</span>
-        <span id="progPct">0%</span>
-      </div>
-      <div class="progress-bg">
-        <div class="progress-fill" id="progFill"></div>
-      </div>
+    <div class="prog-wrap" id="progWrap">
+      <div class="prog-top"><span id="progLbl">جاري...</span><span id="progPct">0%</span></div>
+      <div class="prog-bg"><div class="prog-fill" id="progFill"></div></div>
     </div>
   </div>
 
-  <!-- STATS ROW -->
-  <div class="stats-row" id="statsRow">
-    <div class="stat-box">
-      <div class="stat-number" id="sRows">0</div>
-      <div class="stat-label">إجمالي الصفوف</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-number" id="sSheets">0</div>
-      <div class="stat-label">الأوراق</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-number" id="sResults">—</div>
-      <div class="stat-label">نتائج البحث</div>
-    </div>
+  <!-- STATS -->
+  <div class="stats" id="statsRow">
+    <div class="stat"><div class="stat-n" id="sRows">0</div><div class="stat-l">إجمالي الصفوف</div></div>
+    <div class="stat"><div class="stat-n" id="sSheets">0</div><div class="stat-l">الأوراق</div></div>
+    <div class="stat"><div class="stat-n" id="sRes">—</div><div class="stat-l">نتائج البحث</div></div>
   </div>
 
-  <!-- SEARCH CARD -->
+  <!-- SEARCH -->
   <div class="card">
-    <div class="section-label">🔎 البحث عن الاسم الثلاثي</div>
-    <div class="search-row">
-      <input class="search-input" id="searchInput" type="text"
-        placeholder="اكتب الاسم الثلاثي هنا..."
-        oninput="onSearchInput()"
-        onkeydown="if(event.key==='Enter') doSearch()">
-      <button class="search-btn" id="searchBtn" onclick="doSearch()" disabled>🔍</button>
+    <div class="sec-lbl">🔎 البحث عن الاسم الثلاثي</div>
+    <div class="srch-row">
+      <input class="srch-in" id="searchInput" type="text"
+        placeholder="الاسم الأول الثاني الثالث..."
+        oninput="onInput()" onkeydown="if(event.key==='Enter')doSearch()">
+      <button class="srch-btn" id="searchBtn" onclick="doSearch()" disabled>🔍</button>
     </div>
-    <p class="search-hint">يتجاهل الخانات الفارغة تلقائياً • يبحث في جميع الأعمدة والأوراق</p>
-  </div>
 
-  <!-- RESULTS CARD -->
-  <div class="card" id="resultsCard" style="display:none;">
-    <div class="results-header">
-      <div class="results-title">
-        📋 النتائج
-        <span class="count-badge" id="countBadge">0</span>
+    <div class="mode-info">
+      وضع البحث الحالي: <span class="mbadge" id="modeBadge">🎯 ترتيب دقيق</span>
+    </div>
+
+    <!-- FILTER PANEL -->
+    <div class="filter-bar" id="filterBar">
+
+      <div>
+        <div class="filter-title">⚙️ وضع البحث</div>
+        <div class="filter-row">
+          <button class="fchip active" id="modeExact" onclick="setMode('exact')">🎯 ترتيب دقيق</button>
+          <button class="fchip" id="modeAny"   onclick="setMode('any')"  >🔄 أي ترتيب</button>
+          <button class="fchip" id="modeStart" onclick="setMode('start')">▶️ يبدأ بـ</button>
+        </div>
+        <div style="font-size:11px;color:var(--text2);margin-top:8px;line-height:1.7" id="modeDesc">
+          🎯 <b>ترتيب دقيق:</b> يبحث عن الأجزاء بالترتيب المكتوب بالضبط — الاسم الأول ثم الثاني ثم الثالث
+        </div>
       </div>
-      <button class="copy-all-btn" onclick="copyAll()">📋 نسخ الكل</button>
+
+      <div>
+        <div class="filter-title">📄 فلترة الأوراق</div>
+        <div id="sheetFilter" style="display:flex;flex-wrap:wrap;gap:7px">
+          <button class="schip active" onclick="toggleSheet('__all__',this)">الكل</button>
+        </div>
+      </div>
+
     </div>
-    <div class="results-list" id="resultsList"></div>
+
+    <button class="tog-btn" onclick="toggleFilter()">
+      <span>⚙️</span><span id="filterBtnTxt">إظهار خيارات الفلترة</span>
+    </button>
   </div>
 
-  <!-- EMPTY STATE -->
+  <!-- RESULTS -->
+  <div class="card" id="resCard" style="display:none">
+    <div class="res-hdr">
+      <div class="res-title">📋 النتائج <span class="cnt-badge" id="cntBadge">0</span></div>
+      <button class="copy-all" onclick="copyAll()">📋 نسخ الكل</button>
+    </div>
+    <div class="res-list" id="resList"></div>
+  </div>
+
+  <!-- EMPTY -->
   <div class="card" id="emptyCard">
-    <div class="empty-box">
-      <div class="big-emoji">📊</div>
-      <p>ابدأ باستيراد ملف Excel<br>ثم اكتب الاسم الثلاثي للبحث عنه</p>
+    <div class="empty">
+      <div class="em">📊</div>
+      <p>استورد ملف Excel<br>ثم ابحث عن الاسم الثلاثي</p>
     </div>
   </div>
 
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── STATE ─────────────────────────────────────────────────────────────────
-let sheets = [];      // [{name, rows:[[]]}]
-let totalRows = 0;
-let isDark = false;
+let sheets = [], totalRows = 0, isDark = false;
+let searchMode = 'exact';
+let activeSheets = new Set(['__all__']);
 
-// ─── THEME ─────────────────────────────────────────────────────────────────
-function toggleTheme() {
-  isDark = !isDark;
-  document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
-  document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+function toggleTheme(){
+  isDark=!isDark;
+  document.body.setAttribute('data-theme',isDark?'dark':'light');
+  document.getElementById('themeBtn').textContent=isDark?'☀️':'🌙';
 }
 
-// ─── TOAST ─────────────────────────────────────────────────────────────────
-function toast(msg, ms = 2800) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), ms);
+function toast(msg,ms=2800){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),ms);
 }
 
-// ─── FORMAT SIZE ───────────────────────────────────────────────────────────
-function fmtSize(b) {
-  if (b < 1024) return b + ' B';
-  if (b < 1048576) return (b/1024).toFixed(1) + ' KB';
-  return (b/1048576).toFixed(1) + ' MB';
+function fmtSize(b){
+  if(b<1024)return b+' B';
+  if(b<1048576)return (b/1024).toFixed(1)+' KB';
+  return (b/1048576).toFixed(1)+' MB';
 }
 
-// ─── PROGRESS ──────────────────────────────────────────────────────────────
-function setProgress(pct, label) {
-  document.getElementById('progFill').style.width = Math.min(pct, 100) + '%';
-  document.getElementById('progPct').textContent = Math.round(pct) + '%';
-  if (label) document.getElementById('progLabel').textContent = label;
+function setProg(pct,lbl){
+  document.getElementById('progFill').style.width=Math.min(pct,100)+'%';
+  document.getElementById('progPct').textContent=Math.round(pct)+'%';
+  if(lbl)document.getElementById('progLbl').textContent=lbl;
 }
 
-// ─── LOAD FILE ─────────────────────────────────────────────────────────────
-async function loadFile(input) {
-  const file = input.files[0];
-  if (!file) return;
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 
-  // Reset
-  sheets = []; totalRows = 0;
-  document.getElementById('resultsCard').style.display = 'none';
-  document.getElementById('emptyCard').style.display = 'block';
+// ── تحميل الملف ──────────────────────────────────────────────────────
+async function loadFile(input){
+  const file=input.files[0]; if(!file)return;
+  sheets=[];totalRows=0;activeSheets=new Set(['__all__']);
+  document.getElementById('resCard').style.display='none';
+  document.getElementById('emptyCard').style.display='block';
   document.getElementById('statsRow').classList.remove('show');
-  document.getElementById('searchBtn').disabled = true;
-  document.getElementById('sResults').textContent = '—';
-
-  // Show file info
+  document.getElementById('searchBtn').disabled=true;
+  document.getElementById('sRes').textContent='—';
   document.getElementById('fileInfo').classList.add('show');
-  document.getElementById('fName').textContent = file.name;
-  document.getElementById('fMeta').textContent = fmtSize(file.size) + ' • ' + new Date(file.lastModified).toLocaleDateString('ar-SA');
-  document.getElementById('fStatus').textContent = 'يُحمَّل...';
+  document.getElementById('fName').textContent=file.name;
+  document.getElementById('fMeta').textContent=fmtSize(file.size)+' • '+new Date(file.lastModified).toLocaleDateString('ar-SA');
+  document.getElementById('fStatus').textContent='يُحمَّل...';
   document.getElementById('progWrap').classList.add('show');
-  setProgress(5, 'قراءة الملف...');
+  setProg(5,'قراءة الملف...');
 
-  const reader = new FileReader();
-
-  reader.onprogress = (e) => {
-    if (e.lengthComputable)
-      setProgress((e.loaded / e.total) * 40, 'تحميل البيانات...');
-  };
-
-  reader.onload = async (e) => {
-    try {
-      setProgress(45, 'تحليل الملف...');
-      await sleep(40);
-
-      const data = new Uint8Array(e.target.result);
-
-      setProgress(55, 'فتح المصنف...');
-      await sleep(40);
-
+  const reader=new FileReader();
+  reader.onprogress=e=>{if(e.lengthComputable)setProg((e.loaded/e.total)*40,'تحميل البيانات...');};
+  reader.onload=async e=>{
+    try{
+      setProg(45,'تحليل الملف...');await sleep(40);
+      const data=new Uint8Array(e.target.result);
+      setProg(55,'فتح المصنف...');await sleep(40);
       let wb;
-      try {
-        wb = XLSX.read(data, { type: 'array', cellText: true, cellDates: true });
-      } catch (_) {
-        const txt = new TextDecoder('utf-8', { fatal: false }).decode(data);
-        wb = XLSX.read(txt, { type: 'string' });
-      }
-
-      const sheetNames = wb.SheetNames;
-      setProgress(65, 'معالجة الأوراق...');
-      await sleep(40);
-
-      for (let si = 0; si < sheetNames.length; si++) {
-        const ws   = wb.Sheets[sheetNames[si]];
-        const json = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '', raw: false });
-
-        const validRows = [];
-        for (const row of json) {
-          const hasData = row.some(c => c !== null && c !== undefined && String(c).trim() !== '');
-          if (hasData) {
-            validRows.push(row.map(c => (c !== null && c !== undefined ? String(c).trim() : '')));
+      try{wb=XLSX.read(data,{type:'array',cellText:true,cellDates:true});}
+      catch(_){wb=XLSX.read(new TextDecoder('utf-8',{fatal:false}).decode(data),{type:'string'});}
+      const names=wb.SheetNames;
+      setProg(65,'معالجة الأوراق...');await sleep(40);
+      for(let i=0;i<names.length;i++){
+        const ws=wb.Sheets[names[i]];
+        const json=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:false});
+        const rows=[];
+        for(const row of json){
+          if(row.some(c=>c!==null&&c!==undefined&&String(c).trim()!=='')){
+            rows.push(row.map(c=>(c!==null&&c!==undefined?String(c).trim():'')));
             totalRows++;
           }
         }
-        sheets.push({ name: sheetNames[si], rows: validRows });
-
-        const pct = 65 + ((si + 1) / sheetNames.length) * 30;
-        setProgress(pct, 'ورقة: ' + sheetNames[si]);
-        await sleep(25);
+        sheets.push({name:names[i],rows});
+        setProg(65+((i+1)/names.length)*30,'ورقة: '+names[i]);
+        await sleep(20);
       }
-
-      setProgress(100, 'اكتمل ✅');
-      document.getElementById('fStatus').textContent = '✅ جاهز';
-
-      document.getElementById('sRows').textContent    = totalRows.toLocaleString('ar');
-      document.getElementById('sSheets').textContent  = sheetNames.length.toLocaleString('ar');
+      setProg(100,'اكتمل ✅');
+      document.getElementById('fStatus').textContent='✅ جاهز';
+      document.getElementById('sRows').textContent=totalRows.toLocaleString('ar');
+      document.getElementById('sSheets').textContent=names.length.toLocaleString('ar');
       document.getElementById('statsRow').classList.add('show');
-      document.getElementById('searchBtn').disabled = false;
-
-      toast('✅ تم تحميل ' + file.name + ' — ' + totalRows.toLocaleString('ar') + ' صف');
-      setTimeout(() => document.getElementById('progWrap').classList.remove('show'), 900);
-
-    } catch (err) {
+      document.getElementById('searchBtn').disabled=false;
+      buildSheetFilter(names);
+      toast('✅ '+file.name+' — '+totalRows.toLocaleString('ar')+' صف');
+      setTimeout(()=>document.getElementById('progWrap').classList.remove('show'),900);
+    }catch(err){
       console.error(err);
-      document.getElementById('fStatus').textContent = '❌ خطأ';
-      toast('❌ فشل قراءة الملف. تأكد من صحة التنسيق.');
+      document.getElementById('fStatus').textContent='❌ خطأ';
+      toast('❌ فشل قراءة الملف.');
       document.getElementById('progWrap').classList.remove('show');
     }
   };
-
-  reader.onerror = () => {
-    toast('❌ خطأ في قراءة الملف.');
-    document.getElementById('progWrap').classList.remove('show');
-  };
-
   reader.readAsArrayBuffer(file);
 }
 
-// ─── SLEEP ─────────────────────────────────────────────────────────────────
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-// ─── SEARCH INPUT ──────────────────────────────────────────────────────────
-function onSearchInput() {
-  const v = document.getElementById('searchInput').value.trim();
-  document.getElementById('searchBtn').disabled = sheets.length === 0 || v.length === 0;
+// ── فلتر الأوراق ─────────────────────────────────────────────────────
+function buildSheetFilter(names){
+  const wrap=document.getElementById('sheetFilter');
+  wrap.innerHTML='<button class="schip active" onclick="toggleSheet(\'__all__\',this)">الكل</button>';
+  names.forEach(n=>{
+    const btn=document.createElement('button');
+    btn.className='schip';btn.textContent=n;
+    btn.onclick=()=>toggleSheet(n,btn);
+    wrap.appendChild(btn);
+  });
 }
 
-// ─── NORMALIZE ARABIC ──────────────────────────────────────────────────────
-function norm(t) {
-  return t
-    .replace(/[أإآ]/g, 'ا')
-    .replace(/ة/g, 'ه')
-    .replace(/ى/g, 'ي')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .toLowerCase();
+function toggleSheet(name,btn){
+  if(name==='__all__'){
+    activeSheets=new Set(['__all__']);
+    document.querySelectorAll('.schip').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  }else{
+    activeSheets.delete('__all__');
+    document.querySelector('.schip').classList.remove('active');
+    if(btn.classList.contains('active')){
+      btn.classList.remove('active');activeSheets.delete(name);
+      if(activeSheets.size===0){activeSheets.add('__all__');document.querySelector('.schip').classList.add('active');}
+    }else{btn.classList.add('active');activeSheets.add(name);}
+  }
 }
 
-// ─── SEARCH ────────────────────────────────────────────────────────────────
-async function doSearch() {
-  const query = document.getElementById('searchInput').value.trim();
-  if (!query || sheets.length === 0) return;
+// ── فتح/إغلاق الفلتر ─────────────────────────────────────────────────
+function toggleFilter(){
+  const bar=document.getElementById('filterBar');
+  const show=bar.classList.toggle('show');
+  document.getElementById('filterBtnTxt').textContent=show?'إخفاء خيارات الفلترة':'إظهار خيارات الفلترة';
+}
 
-  const nq = norm(query);
-  const results = [];
+// ── وضع البحث ────────────────────────────────────────────────────────
+const modeLabels={
+  exact:'🎯 ترتيب دقيق',
+  any:'🔄 أي ترتيب',
+  start:'▶️ يبدأ بـ'
+};
+const modeDescs={
+  exact:'🎯 <b>ترتيب دقيق:</b> يبحث عن الأجزاء بالترتيب المكتوب بالضبط — الاسم الأول ثم الثاني ثم الثالث',
+  any:'🔄 <b>أي ترتيب:</b> يبحث عن الأجزاء الثلاثة بأي ترتيب كان في السطر',
+  start:'▶️ <b>يبدأ بـ:</b> يبحث عن السجلات التي تبدأ بالاسم الأول المكتوب'
+};
 
-  document.getElementById('emptyCard').style.display = 'none';
-  document.getElementById('resultsCard').style.display = 'none';
+function setMode(mode){
+  searchMode=mode;
+  ['exact','any','start'].forEach(m=>{
+    document.getElementById('mode'+m.charAt(0).toUpperCase()+m.slice(1)).classList.toggle('active',m===mode);
+  });
+  document.getElementById('modeBadge').textContent=modeLabels[mode];
+  document.getElementById('modeDesc').innerHTML=modeDescs[mode];
+}
+
+function onInput(){
+  const v=document.getElementById('searchInput').value.trim();
+  document.getElementById('searchBtn').disabled=sheets.length===0||v.length===0;
+}
+
+// ── تطبيع النص العربي ────────────────────────────────────────────────
+function norm(t){
+  return t.replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/\s+/g,' ').trim().toLowerCase();
+}
+
+// ── دالة المطابقة الأساسية ───────────────────────────────────────────
+// تبحث عن الاسم الثلاثي بالترتيب المحدد
+function matchRow(parts, row){
+  const normParts = parts.map(norm);
+
+  // ── 1) بحث في خلية واحدة تحتوي الاسم الثلاثي كاملاً
+  for(const cell of row){
+    if(!cell) continue;
+    const nc = norm(cell);
+
+    if(searchMode === 'exact'){
+      // الأجزاء موجودة بالترتيب المكتوب تماماً (الأول ثم الثاني ثم الثالث)
+      let pos=0, ok=true;
+      for(const p of normParts){
+        const idx=nc.indexOf(p,pos);
+        if(idx===-1){ok=false;break;}
+        pos=idx+p.length;
+      }
+      if(ok) return cell;
+
+    }else if(searchMode === 'any'){
+      // جميع الأجزاء موجودة بأي ترتيب
+      if(normParts.every(p=>nc.includes(p))) return cell;
+
+    }else if(searchMode === 'start'){
+      // الخلية تبدأ بالجزء الأول وتحتوي الباقي
+      if(nc.startsWith(normParts[0]) && normParts.slice(1).every(p=>nc.includes(p))) return cell;
+    }
+  }
+
+  // ── 2) بحث عبر خلايا متعددة في الصف بالترتيب (كل جزء في خلية منفصلة)
+  if(searchMode === 'exact' || searchMode === 'start'){
+    const nonEmpty = row.filter(c=>c&&c.trim()!=='');
+    const normCells = nonEmpty.map(c=>norm(c));
+    for(let ci=0; ci<=normCells.length-normParts.length; ci++){
+      let match=true;
+      for(let pi=0; pi<normParts.length; pi++){
+        // كل جزء يجب أن يكون موجوداً في الخلية المقابلة بالترتيب
+        if(!normCells[ci+pi].includes(normParts[pi])){match=false;break;}
+      }
+      if(match) return nonEmpty.slice(ci, ci+normParts.length).join(' ');
+    }
+  }
+
+  // ── 3) للوضع "أي ترتيب" — ابحث عن الأجزاء في أي خلايا من الصف
+  if(searchMode === 'any'){
+    const nonEmpty = row.filter(c=>c&&c.trim()!=='');
+    const normCells = nonEmpty.map(c=>norm(c));
+    const matched = [];
+    for(const p of normParts){
+      const idx = normCells.findIndex(nc=>nc.includes(p));
+      if(idx===-1){matched.length=0;break;}
+      matched.push(nonEmpty[idx]);
+    }
+    if(matched.length===normParts.length) return matched.join(' ');
+  }
+
+  return null;
+}
+
+// ── البحث الرئيسي ────────────────────────────────────────────────────
+async function doSearch(){
+  const query=document.getElementById('searchInput').value.trim();
+  if(!query||sheets.length===0)return;
+
+  const parts=query.split(/\s+/).filter(p=>p.length>0);
+  if(parts.length===0)return;
+
+  const results=[];
+  document.getElementById('emptyCard').style.display='none';
+  document.getElementById('resCard').style.display='none';
   document.getElementById('progWrap').classList.add('show');
-  setProgress(0, 'جاري البحث...');
-
+  setProg(0,'جاري البحث...');
   await sleep(30);
 
-  for (let si = 0; si < sheets.length; si++) {
-    const sheet = sheets[si];
-    for (const row of sheet.rows) {
-      let matched = null;
-      for (const cell of row) {
-        if (!cell) continue;
-        if (norm(cell).includes(nq)) { matched = cell; break; }
-      }
-      if (matched) {
-        const others = row.filter(c => c && c !== matched).slice(0, 7);
-        results.push({ name: matched, sheet: sheet.name, others });
+  const targets=activeSheets.has('__all__')?sheets:sheets.filter(s=>activeSheets.has(s.name));
+
+  for(let si=0;si<targets.length;si++){
+    const sheet=targets[si];
+    for(const row of sheet.rows){
+      const matched=matchRow(parts,row);
+      if(matched){
+        results.push({name:matched, sheet:sheet.name, row:row});
       }
     }
-    setProgress(((si + 1) / sheets.length) * 100, 'بحث في: ' + sheet.name);
+    setProg(((si+1)/targets.length)*100,'بحث في: '+sheet.name);
     await sleep(15);
   }
 
-  setProgress(100, 'اكتمل البحث ✅');
-  setTimeout(() => document.getElementById('progWrap').classList.remove('show'), 700);
-
-  document.getElementById('sResults').textContent = results.length.toLocaleString('ar');
-  renderResults(results, query);
+  setProg(100,'اكتمل ✅');
+  setTimeout(()=>document.getElementById('progWrap').classList.remove('show'),700);
+  document.getElementById('sRes').textContent=results.length.toLocaleString('ar');
+  renderResults(results,parts);
 }
 
-// ─── RENDER RESULTS ────────────────────────────────────────────────────────
-function renderResults(results, query) {
-  const list  = document.getElementById('resultsList');
-  const card  = document.getElementById('resultsCard');
-  list.innerHTML = '';
-  document.getElementById('countBadge').textContent = results.length;
-  card.style.display = 'block';
+// ── عرض النتائج ──────────────────────────────────────────────────────
+function renderResults(results,parts){
+  const list=document.getElementById('resList');
+  const card=document.getElementById('resCard');
+  list.innerHTML='';
+  document.getElementById('cntBadge').textContent=results.length;
+  card.style.display='block';
 
-  if (results.length === 0) {
-    list.innerHTML = `
-      <div class="empty-box">
-        <div class="big-emoji">🔍</div>
-        <p>لا توجد نتائج للبحث عن<br><strong>"${esc(query)}"</strong></p>
-      </div>`;
+  if(results.length===0){
+    list.innerHTML=`<div class="empty"><div class="em">🔍</div>
+      <p>لا توجد نتائج<br>جرّب تغيير وضع البحث أو تقليل الأجزاء</p></div>`;
     return;
   }
 
-  results.forEach((r, i) => {
-    const copyText = r.name + (r.others.length ? '\n' + r.others.join(' | ') : '');
-    const extrasHtml = r.others.length
-      ? `<div class="result-extra">${r.others.map(esc).join('  ·  ')}</div>`
-      : '';
+  const normParts=parts.map(norm);
 
-    const div = document.createElement('div');
-    div.className = 'result-item';
-    div.dataset.copy = copyText;
-    div.innerHTML = `
-      <button class="copy-item-btn" onclick="copyItem(this,event)" title="نسخ">📋</button>
-      <div class="result-main-name">${highlight(r.name, query)}</div>
-      <div class="result-tags">
+  results.forEach((r,i)=>{
+    // كامل محتوى السطر (بدون فراغات)
+    const fullRow=r.row.filter(c=>c&&c.trim()!=='');
+    const fullRowText=fullRow.join(' | ');
+
+    // عرض كل خلية من السطر مع تمييز المتطابقة
+    const cellsHtml=fullRow.map(cell=>{
+      const nc=norm(cell);
+      const isHit=normParts.some(p=>nc.includes(p));
+      return `<span class="cell-box ${isHit?'hit':''}">${esc(cell)}</span>`;
+    }).join('');
+
+    const div=document.createElement('div');
+    div.className='res-item';
+    div.dataset.copy=fullRowText;
+
+    div.innerHTML=`
+      <button class="copy-btn" onclick="copyItem(this,event)">📋</button>
+      <div class="res-name">${hlName(r.name,parts)}</div>
+      <div class="res-tags">
         <span class="tag">📄 ${esc(r.sheet)}</span>
-        <span class="tag"># ${i + 1}</span>
+        <span class="tag"># ${i+1}</span>
       </div>
-      ${extrasHtml}
+      <div class="row-full">${cellsHtml}</div>
     `;
     list.appendChild(div);
   });
 }
 
-// ─── HIGHLIGHT ─────────────────────────────────────────────────────────────
-function highlight(text, query) {
-  const ni = norm(text).indexOf(norm(query));
-  if (ni === -1) return esc(text);
-  return esc(text.slice(0, ni))
-    + '<mark>' + esc(text.slice(ni, ni + query.length)) + '</mark>'
-    + esc(text.slice(ni + query.length));
+// ── تمييز الاسم ──────────────────────────────────────────────────────
+function hlName(text,parts){
+  let result=esc(text);
+  parts.forEach(part=>{
+    const escaped=esc(part);
+    const re=new RegExp(escaped,'gi');
+    result=result.replace(re,m=>`<mark>${m}</mark>`);
+  });
+  return result;
 }
 
-function esc(t) {
-  return String(t)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function esc(t){
+  return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ─── COPY ──────────────────────────────────────────────────────────────────
-function copyItem(btn, e) {
+// ── النسخ ────────────────────────────────────────────────────────────
+function copyItem(btn,e){
   e.stopPropagation();
-  const text = btn.closest('.result-item').dataset.copy;
-  writeClip(text);
-  btn.textContent = '✅';
-  btn.classList.add('done');
-  setTimeout(() => { btn.textContent = '📋'; btn.classList.remove('done'); }, 2200);
+  writeClip(btn.closest('.res-item').dataset.copy);
+  btn.textContent='✅';btn.classList.add('done');
+  setTimeout(()=>{btn.textContent='📋';btn.classList.remove('done');},2200);
 }
 
-function copyAll() {
-  const items = [...document.querySelectorAll('.result-item')];
-  const text  = items.map((el, i) => `${i+1}. ${el.dataset.copy}`).join('\n\n');
-  writeClip(text);
-  toast('✅ تم نسخ ' + items.length + ' نتيجة');
+function copyAll(){
+  const items=[...document.querySelectorAll('.res-item')];
+  writeClip(items.map((el,i)=>`${i+1}. ${el.dataset.copy}`).join('\n\n'));
+  toast('✅ تم نسخ '+items.length+' نتيجة');
 }
 
-function writeClip(text) {
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(() => toast('✅ تم النسخ!'));
-  } else {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.cssText = 'position:fixed;opacity:0';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
+function writeClip(text){
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(()=>toast('✅ تم النسخ!'));
+  }else{
+    const ta=document.createElement('textarea');
+    ta.value=text;ta.style.cssText='position:fixed;opacity:0';
+    document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');document.body.removeChild(ta);
     toast('✅ تم النسخ!');
   }
 }
 
-// ─── SERVICE WORKER ────────────────────────────────────────────────────────
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
-  });
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
 </script>
 </body>
