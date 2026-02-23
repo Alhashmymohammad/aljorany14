@@ -1,0 +1,28 @@
+{
+  "name": "Aljorany - الجوراني",
+  "short_name": "Aljorany",
+  "description": "البحث الذكي في ملفات Excel",
+  "start_url": "/aljorany14/index.html",
+  "scope": "/aljorany14/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#6c63ff",
+  "theme_color": "#6c63ff",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "productivity"]
+}
