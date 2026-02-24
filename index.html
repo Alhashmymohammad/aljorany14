@@ -6,471 +6,627 @@
 <meta name="theme-color" content="#4f46e5">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Aljorany</title>
 <link rel="manifest" href="manifest.json">
-<!-- XLSX_PLACEHOLDER -->
 <style>
-:root{--p1:#4f46e5;--p2:#7c3aed;--p3:#2563eb;--grad:linear-gradient(135deg,#4f46e5 0%,#7c3aed 50%,#2563eb 100%);--bg:#f5f3ff;--bg2:#ede9fe;--surface:#fff;--surface2:#f8f7ff;--text:#1e1b4b;--text2:#5b5b8a;--text3:#9ca3af;--border:rgba(99,102,241,.15);--border2:rgba(99,102,241,.3);--shadow:0 4px 20px rgba(79,70,229,.12);--ok:#10b981;--r:18px;--r2:12px;}
-[data-theme="dark"]{--bg:#0d0b1e;--bg2:#13103a;--surface:#1a1740;--surface2:#1e1b4b;--text:#e8e5ff;--text2:#a5b4fc;--text3:#6b7280;--border:rgba(99,102,241,.2);--border2:rgba(99,102,241,.4);--shadow:0 4px 20px rgba(0,0,0,.4);}
+:root{--p1:#4f46e5;--p2:#7c3aed;--p3:#2563eb;--grad:linear-gradient(135deg,#4f46e5 0%,#7c3aed 50%,#2563eb 100%);--bg:#f5f3ff;--bg2:#ede9fe;--sf:#fff;--sf2:#f8f7ff;--tx:#1e1b4b;--tx2:#5b5b8a;--tx3:#9ca3af;--bd:rgba(99,102,241,.15);--bd2:rgba(99,102,241,.3);--sh:0 4px 20px rgba(79,70,229,.12);--ok:#10b981;--r:18px;--r2:12px;}
+[data-theme=dark]{--bg:#0d0b1e;--bg2:#13103a;--sf:#1a1740;--sf2:#1e1b4b;--tx:#e8e5ff;--tx2:#a5b4fc;--tx3:#6b7280;--bd:rgba(99,102,241,.2);--bd2:rgba(99,102,241,.4);--sh:0 4px 20px rgba(0,0,0,.4);}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;display:flex;flex-direction:column;height:100vh;height:100dvh;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--tx);transition:background .3s,color .3s;display:flex;flex-direction:column;height:100vh;height:100dvh;}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 50% at 20% 10%,rgba(99,102,241,.07) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(124,58,237,.06) 0%,transparent 70%);}
 .hdr{background:var(--grad);padding:env(safe-area-inset-top,0) 0 0;flex-shrink:0;box-shadow:0 4px 30px rgba(79,70,229,.4);position:relative;z-index:10}
 .hdr-in{display:flex;align-items:center;justify-content:space-between;padding:13px 16px}
 .logo{display:flex;align-items:center;gap:10px}
-.logo-ico{width:38px;height:38px;background:rgba(255,255,255,.2);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;border:1px solid rgba(255,255,255,.3)}
-.logo-name{font-size:21px;font-weight:900;color:#fff;letter-spacing:1px}
-.logo-sub{font-size:10px;color:rgba(255,255,255,.75);font-weight:600}
-.ico-btn{width:38px;height:38px;border-radius:10px;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.15);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.ico-btn:active{transform:scale(.9)}
-.scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative;z-index:1}
-.scroll::-webkit-scrollbar{width:0}
-.content{padding:14px 13px 80px;max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:11px}
-.card{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;transition:all .3s}
-.card-hd{padding:13px 15px 9px;display:flex;align-items:center;gap:8px}
-.card-ico{width:29px;height:29px;border-radius:8px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.card-ttl{font-size:12px;font-weight:700;color:var(--text2);letter-spacing:.5px}
-.card-bd{padding:0 13px 13px}
-#fileInput{display:none}
-.imp-zone{border:2px dashed var(--border2);border-radius:var(--r2);padding:20px 14px;text-align:center;cursor:pointer;background:var(--surface2);transition:all .25s}
-.imp-zone:active{background:rgba(79,70,229,.08)}
-.imp-ico{font-size:34px;margin-bottom:7px;display:block}
-.imp-txt{font-size:14px;font-weight:700;color:var(--p1);margin-bottom:3px}
-.imp-hint{font-size:10px;color:var(--text3);line-height:1.5}
-.finfo{display:none;margin-top:9px;padding:11px;background:var(--surface2);border-radius:var(--r2);border:1px solid var(--border);gap:9px;align-items:center}
-.finfo.show{display:flex}
-.f-ico{font-size:27px;flex-shrink:0}
-.f-det{flex:1;min-width:0}
-.f-nm{font-size:12px;font-weight:700;color:var(--text);word-break:break-all;line-height:1.3}
-.f-mt{font-size:10px;color:var(--text3);margin-top:2px}
-.st-pill{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0;background:var(--grad);color:#fff}
-.prog{display:none;margin-top:11px}
-.prog.show{display:block}
-.prog-lbs{display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--text2);margin-bottom:5px}
-.prog-tr{height:8px;background:var(--bg2);border-radius:8px;overflow:hidden}
-.prog-br{height:100%;border-radius:8px;background:var(--grad);background-size:200% 100%;animation:gs 1.8s linear infinite;transition:width .4s cubic-bezier(.4,0,.2,1);width:0%}
+.logo-ic{width:38px;height:38px;background:rgba(255,255,255,.2);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;border:1px solid rgba(255,255,255,.3)}
+.logo-nm{font-size:21px;font-weight:900;color:#fff;letter-spacing:1px}
+.logo-sb{font-size:10px;color:rgba(255,255,255,.75);font-weight:600}
+.ib{width:38px;height:38px;border-radius:10px;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.15);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.ib:active{transform:scale(.9)}
+.scr{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative;z-index:1}
+.scr::-webkit-scrollbar{width:0}
+.cnt{padding:14px 13px 80px;max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:11px}
+.card{background:var(--sf);border-radius:var(--r);border:1px solid var(--bd);box-shadow:var(--sh);overflow:hidden}
+.chd{padding:13px 15px 9px;display:flex;align-items:center;gap:8px}
+.cic{width:29px;height:29px;border-radius:8px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.ctt{font-size:12px;font-weight:700;color:var(--tx2);letter-spacing:.5px}
+.cbd{padding:0 13px 13px}
+#fi{display:none}
+.iz{border:2px dashed var(--bd2);border-radius:var(--r2);padding:20px 14px;text-align:center;cursor:pointer;background:var(--sf2);transition:all .25s}
+.iz:active{background:rgba(79,70,229,.08)}
+.iz-ic{font-size:34px;margin-bottom:7px;display:block}
+.iz-tx{font-size:14px;font-weight:700;color:var(--p1);margin-bottom:3px}
+.iz-ht{font-size:10px;color:var(--tx3);line-height:1.5}
+.finf{display:none;margin-top:9px;padding:11px;background:var(--sf2);border-radius:var(--r2);border:1px solid var(--bd);gap:9px;align-items:center}
+.finf.on{display:flex}
+.fi-ic{font-size:27px;flex-shrink:0}
+.fi-dt{flex:1;min-width:0}
+.fi-nm{font-size:12px;font-weight:700;color:var(--tx);word-break:break-all;line-height:1.3}
+.fi-mt{font-size:10px;color:var(--tx3);margin-top:2px}
+.sp{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0;background:var(--grad);color:#fff}
+.pg{display:none;margin-top:11px}
+.pg.on{display:block}
+.pg-lb{display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:var(--tx2);margin-bottom:5px}
+.pg-tr{height:8px;background:var(--bg2);border-radius:8px;overflow:hidden}
+.pg-br{height:100%;border-radius:8px;background:var(--grad);background-size:200% 100%;animation:gs 1.8s linear infinite;transition:width .4s cubic-bezier(.4,0,.2,1);width:0%}
 @keyframes gs{0%{background-position:0% 50%}100%{background-position:200% 50%}}
-.stats{display:none;grid-template-columns:repeat(3,1fr);gap:9px}
-.stats.show{display:grid}
-.stat{background:var(--surface);border-radius:var(--r2);border:1px solid var(--border);padding:11px 7px;text-align:center;box-shadow:0 2px 8px rgba(79,70,229,.08)}
-.stat-v{font-size:19px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.stat-l{font-size:10px;color:var(--text3);font-weight:600;margin-top:2px}
-.srch-row{display:flex;gap:8px;align-items:stretch}
-.srch-in{flex:1;padding:13px 15px;border-radius:var(--r2);border:2px solid var(--border);background:var(--surface2);color:var(--text);font-size:15px;font-weight:600;outline:none;transition:all .25s;direction:rtl;min-width:0;font-family:inherit}
-.srch-in:focus{border-color:var(--p1);background:var(--surface);box-shadow:0 0 0 4px rgba(79,70,229,.12)}
-.srch-in::placeholder{color:var(--text3);font-weight:400}
-.srch-btn{width:50px;border-radius:var(--r2);border:none;background:var(--grad);color:#fff;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;box-shadow:var(--shadow)}
-.srch-btn:active{transform:scale(.93)}
-.srch-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
-.mode-row{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:9px;font-size:11px;color:var(--text3)}
-.mpill{padding:3px 10px;border-radius:20px;background:rgba(79,70,229,.12);color:var(--p1);font-size:11px;font-weight:700}
-.ftog{width:100%;margin-top:9px;padding:9px 13px;border-radius:10px;border:1.5px solid var(--border);background:transparent;color:var(--p1);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s}
-.ftog:active{background:var(--surface2)}
-.fpanel{display:none;flex-direction:column;gap:13px;margin-top:11px;padding-top:11px;border-top:1px solid var(--border)}
-.fpanel.show{display:flex}
-.fsec-ttl{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{padding:6px 13px;border-radius:20px;border:1.5px solid var(--border2);background:var(--surface2);color:var(--text2);font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .2s;white-space:nowrap}
-.chip.active{background:var(--grad);color:#fff;border-color:transparent;box-shadow:0 3px 12px rgba(79,70,229,.3)}
-.chip:active{transform:scale(.95)}
-.mdesc{padding:8px 11px;border-radius:9px;background:var(--surface2);border:1px solid var(--border);font-size:11px;color:var(--text2);line-height:1.7;margin-top:7px}
-.res-hd{padding:13px 15px 9px;display:flex;align-items:center;justify-content:space-between}
-.res-ttl{font-size:13px;font-weight:800;display:flex;align-items:center;gap:7px}
-.cnt-pill{background:var(--grad);color:#fff;font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px}
-.copy-all{padding:6px 13px;border-radius:8px;border:none;background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .2s}
-.copy-all:active{transform:scale(.95)}
-.res-list{padding:0 11px 11px;display:flex;flex-direction:column;gap:9px}
-.ritem{background:var(--surface2);border:1.5px solid var(--border);border-right:4px solid var(--p1);border-radius:13px;padding:12px 12px 12px 44px;position:relative;animation:fu .22s ease both}
+.sts{display:none;grid-template-columns:repeat(3,1fr);gap:9px}
+.sts.on{display:grid}
+.sc{background:var(--sf);border-radius:var(--r2);border:1px solid var(--bd);padding:11px 7px;text-align:center;box-shadow:0 2px 8px rgba(79,70,229,.08)}
+.sv{font-size:19px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sl{font-size:10px;color:var(--tx3);font-weight:600;margin-top:2px}
+.sr{display:flex;gap:8px;align-items:stretch}
+.si{flex:1;padding:13px 15px;border-radius:var(--r2);border:2px solid var(--bd);background:var(--sf2);color:var(--tx);font-size:15px;font-weight:600;outline:none;transition:all .25s;direction:rtl;min-width:0;font-family:inherit}
+.si:focus{border-color:var(--p1);background:var(--sf);box-shadow:0 0 0 4px rgba(79,70,229,.12)}
+.si::placeholder{color:var(--tx3);font-weight:400}
+.sb{width:50px;border-radius:var(--r2);border:none;background:var(--grad);color:#fff;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;box-shadow:var(--sh)}
+.sb:active{transform:scale(.93)}
+.sb:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.mr{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:9px;font-size:11px;color:var(--tx3)}
+.mp{padding:3px 10px;border-radius:20px;background:rgba(79,70,229,.12);color:var(--p1);font-size:11px;font-weight:700}
+.ft{width:100%;margin-top:9px;padding:9px 13px;border-radius:10px;border:1.5px solid var(--bd);background:transparent;color:var(--p1);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s}
+.ft:active{background:var(--sf2)}
+.fp{display:none;flex-direction:column;gap:13px;margin-top:11px;padding-top:11px;border-top:1px solid var(--bd)}
+.fp.on{display:flex}
+.fst{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+.chs{display:flex;flex-wrap:wrap;gap:6px}
+.ch{padding:6px 13px;border-radius:20px;border:1.5px solid var(--bd2);background:var(--sf2);color:var(--tx2);font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .2s;white-space:nowrap}
+.ch.on{background:var(--grad);color:#fff;border-color:transparent;box-shadow:0 3px 12px rgba(79,70,229,.3)}
+.ch:active{transform:scale(.95)}
+.md{padding:8px 11px;border-radius:9px;background:var(--sf2);border:1px solid var(--bd);font-size:11px;color:var(--tx2);line-height:1.7;margin-top:7px}
+.rh{padding:13px 15px 9px;display:flex;align-items:center;justify-content:space-between}
+.rt{font-size:13px;font-weight:800;display:flex;align-items:center;gap:7px}
+.cp{background:var(--grad);color:#fff;font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px}
+.ca{padding:6px 13px;border-radius:8px;border:none;background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .2s}
+.ca:active{transform:scale(.95)}
+.rl{padding:0 11px 11px;display:flex;flex-direction:column;gap:9px}
+.ri{background:var(--sf2);border:1.5px solid var(--bd);border-right:4px solid var(--p1);border-radius:13px;padding:12px 12px 12px 44px;position:relative;animation:fu .22s ease both}
 @keyframes fu{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:translateY(0)}}
-.rname{font-size:16px;font-weight:800;color:var(--text);line-height:1.5;margin-bottom:7px}
-.rname mark{background:linear-gradient(135deg,rgba(79,70,229,.2),rgba(124,58,237,.2));color:var(--p1);border-radius:4px;padding:0 3px;font-weight:900;font-style:normal}
-.rtags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:9px}
-.rtag{font-size:10px;padding:2px 8px;border-radius:20px;background:rgba(79,70,229,.1);color:var(--p2);font-weight:700}
-.rcells{display:flex;flex-wrap:wrap;gap:4px;padding-top:8px;border-top:1px dashed var(--border2)}
-.cell{padding:3px 9px;border-radius:7px;font-size:11px;font-weight:600;border:1px solid var(--border);background:var(--surface);color:var(--text);word-break:break-word;line-height:1.5}
-.cell.hit{background:linear-gradient(135deg,rgba(79,70,229,.15),rgba(124,58,237,.15));border-color:var(--p1);color:var(--p1);font-weight:700}
-.cbtn{position:absolute;top:11px;left:11px;width:29px;height:29px;border-radius:7px;border:none;background:rgba(79,70,229,.1);color:var(--p1);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.cbtn:active{transform:scale(.9)}
-.cbtn.done{background:var(--ok);color:#fff}
-.empty{text-align:center;padding:45px 18px}
-.e-ico{font-size:50px;margin-bottom:12px}
-.e-txt{font-size:13px;line-height:1.8;color:var(--text2)}
+.rn{font-size:16px;font-weight:800;color:var(--tx);line-height:1.5;margin-bottom:7px}
+.rn mark{background:linear-gradient(135deg,rgba(79,70,229,.2),rgba(124,58,237,.2));color:var(--p1);border-radius:4px;padding:0 3px;font-weight:900;font-style:normal}
+.rtg{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:9px}
+.tg{font-size:10px;padding:2px 8px;border-radius:20px;background:rgba(79,70,229,.1);color:var(--p2);font-weight:700}
+.rc{display:flex;flex-wrap:wrap;gap:4px;padding-top:8px;border-top:1px dashed var(--bd2)}
+.ce{padding:3px 9px;border-radius:7px;font-size:11px;font-weight:600;border:1px solid var(--bd);background:var(--sf);color:var(--tx);word-break:break-word;line-height:1.5}
+.ce.ht{background:linear-gradient(135deg,rgba(79,70,229,.15),rgba(124,58,237,.15));border-color:var(--p1);color:var(--p1);font-weight:700}
+.cb{position:absolute;top:11px;left:11px;width:29px;height:29px;border-radius:7px;border:none;background:rgba(79,70,229,.1);color:var(--p1);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.cb:active{transform:scale(.9)}
+.cb.ok{background:var(--ok);color:#fff}
+.em{text-align:center;padding:45px 18px}
+.ei{font-size:50px;margin-bottom:12px}
+.et{font-size:13px;line-height:1.8;color:var(--tx2)}
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(100px);background:#1e1b4b;color:#fff;padding:10px 22px;border-radius:30px;font-size:12px;font-weight:700;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,.4);transition:transform .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;pointer-events:none}
-.toast.show{transform:translateX(-50%) translateY(0)}
-.no-lib{display:none;margin:20px 13px;padding:16px;background:#fef3c7;border:2px solid #f59e0b;border-radius:14px;text-align:center;font-size:13px;line-height:1.8;color:#92400e}
-.no-lib.show{display:block}
+.toast.on{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body data-theme="light">
-
 <div class="hdr">
   <div class="hdr-in">
     <div class="logo">
-      <div class="logo-ico">🔍</div>
-      <div>
-        <div class="logo-name">Aljorany</div>
-        <div class="logo-sub">البحث الذكي في Excel</div>
-      </div>
+      <div class="logo-ic">🔍</div>
+      <div><div class="logo-nm">Aljorany</div><div class="logo-sb">البحث الذكي في Excel</div></div>
     </div>
-    <button class="ico-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    <button class="ib" onclick="tTheme()" id="tBtn">🌙</button>
   </div>
 </div>
-
-<div class="scroll">
-<div class="content">
-
-  <div class="no-lib" id="noLib">
-    ⚠️ <b>يلزم تضمين مكتبة xlsx</b><br>
-    شغّل ملف <b>make-offline.ps1</b> مرة واحدة<br>
-    ثم ارفع index.html على GitHub
-  </div>
-
+<div class="scr"><div class="cnt">
   <div class="card">
-    <div class="card-hd"><div class="card-ico">📂</div><div class="card-ttl">استيراد ملف Excel</div></div>
-    <div class="card-bd">
-      <input type="file" id="fileInput" accept=".xlsx,.xls,.xlsm,.xlsb,.xltx,.xltm,.ods,.csv" onchange="loadFile(this)">
-      <div class="imp-zone" onclick="document.getElementById('fileInput').click()">
-        <span class="imp-ico">📊</span>
-        <div class="imp-txt">اضغط لاختيار الملف</div>
-        <div class="imp-hint">xlsx · xls · xlsm · xlsb · xltx · xltm · ods · csv</div>
+    <div class="chd"><div class="cic">📂</div><div class="ctt">استيراد ملف Excel</div></div>
+    <div class="cbd">
+      <input type="file" id="fi" accept=".xlsx,.xls,.xlsm,.xlsb,.xltx,.xltm,.ods,.csv" onchange="loadF(this)">
+      <div class="iz" onclick="document.getElementById('fi').click()">
+        <span class="iz-ic">📊</span>
+        <div class="iz-tx">اضغط لاختيار الملف</div>
+        <div class="iz-ht">xlsx · xls · xlsm · xlsb · xltx · xltm · ods · csv</div>
       </div>
-      <div class="finfo" id="finfo">
-        <div class="f-ico">📗</div>
-        <div class="f-det"><div class="f-nm" id="fNm">—</div><div class="f-mt" id="fMt">—</div></div>
-        <div class="st-pill" id="fSt">جاري</div>
+      <div class="finf" id="finf">
+        <div class="fi-ic">📗</div>
+        <div class="fi-dt"><div class="fi-nm" id="fNm"></div><div class="fi-mt" id="fMt"></div></div>
+        <div class="sp" id="fSt">جاري</div>
       </div>
-      <div class="prog" id="prog">
-        <div class="prog-lbs"><span id="pLbl">جاري...</span><span id="pPct">0%</span></div>
-        <div class="prog-tr"><div class="prog-br" id="pBar"></div></div>
+      <div class="pg" id="pg">
+        <div class="pg-lb"><span id="pLb">جاري...</span><span id="pPc">0%</span></div>
+        <div class="pg-tr"><div class="pg-br" id="pBr"></div></div>
       </div>
     </div>
   </div>
-
-  <div class="stats" id="stats">
-    <div class="stat"><div class="stat-v" id="sRows">0</div><div class="stat-l">إجمالي الصفوف</div></div>
-    <div class="stat"><div class="stat-v" id="sShts">0</div><div class="stat-l">الأوراق</div></div>
-    <div class="stat"><div class="stat-v" id="sRes">—</div><div class="stat-l">نتائج البحث</div></div>
+  <div class="sts" id="sts">
+    <div class="sc"><div class="sv" id="sR">0</div><div class="sl">إجمالي الصفوف</div></div>
+    <div class="sc"><div class="sv" id="sS">0</div><div class="sl">الأوراق</div></div>
+    <div class="sc"><div class="sv" id="sN">—</div><div class="sl">نتائج البحث</div></div>
   </div>
-
   <div class="card">
-    <div class="card-hd"><div class="card-ico">🔎</div><div class="card-ttl">البحث عن الاسم الثلاثي</div></div>
-    <div class="card-bd">
-      <div class="srch-row">
-        <input class="srch-in" id="sIn" type="text" placeholder="الاسم الأول الثاني الثالث..."
-          oninput="onInp()" onkeydown="if(event.key==='Enter')doSearch()">
-        <button class="srch-btn" id="sBtn" onclick="doSearch()" disabled>🔍</button>
+    <div class="chd"><div class="cic">🔎</div><div class="ctt">البحث عن الاسم الثلاثي</div></div>
+    <div class="cbd">
+      <div class="sr">
+        <input class="si" id="sI" type="text" placeholder="الاسم الأول الثاني الثالث..." oninput="onI()" onkeydown="if(event.key==='Enter')doS()">
+        <button class="sb" id="sB" onclick="doS()" disabled>🔍</button>
       </div>
-      <div class="mode-row">وضع البحث: <span class="mpill" id="mPill">🎯 ترتيب دقيق</span></div>
-      <div class="fpanel" id="fpanel">
+      <div class="mr">وضع البحث: <span class="mp" id="mP">🎯 ترتيب دقيق</span></div>
+      <div class="fp" id="fpn">
         <div>
-          <div class="fsec-ttl">⚙️ وضع البحث</div>
-          <div class="chips">
-            <button class="chip active" id="mExact" onclick="setMode('exact')">🎯 ترتيب دقيق</button>
-            <button class="chip" id="mAny" onclick="setMode('any')">🔄 أي ترتيب</button>
-            <button class="chip" id="mStart" onclick="setMode('start')">▶️ يبدأ بـ</button>
+          <div class="fst">⚙️ وضع البحث</div>
+          <div class="chs">
+            <button class="ch on" id="mE" onclick="sMode('exact')">🎯 ترتيب دقيق</button>
+            <button class="ch" id="mA" onclick="sMode('any')">🔄 أي ترتيب</button>
+            <button class="ch" id="mS" onclick="sMode('start')">▶️ يبدأ بـ</button>
           </div>
-          <div class="mdesc" id="mDesc">🎯 <b>ترتيب دقيق:</b> يبحث بالترتيب المكتوب بالضبط — سواء في خلية واحدة أو خلايا متتالية بالصف</div>
+          <div class="md" id="mD">🎯 <b>ترتيب دقيق:</b> يبحث بالترتيب المكتوب بالضبط — في خلية واحدة أو خلايا متتالية بالصف</div>
         </div>
         <div>
-          <div class="fsec-ttl">📄 تحديد الورقة</div>
-          <div class="chips" id="shChips"><button class="chip active" onclick="selSheet('__all__',this)">كل الأوراق</button></div>
+          <div class="fst">📄 تحديد الورقة</div>
+          <div class="chs" id="shC"><button class="ch on" onclick="sSheet('__all__',this)">كل الأوراق</button></div>
         </div>
       </div>
-      <button class="ftog" onclick="togFilter()"><span id="fArr">▼</span><span id="fTxt">خيارات الفلترة</span></button>
+      <button class="ft" onclick="tF()"><span id="fA">▼</span><span id="fT">خيارات الفلترة</span></button>
     </div>
   </div>
-
-  <div class="card" id="resCard" style="display:none">
-    <div class="res-hd">
-      <div class="res-ttl">النتائج <span class="cnt-pill" id="cntP">0</span></div>
-      <button class="copy-all" onclick="copyAll()">📋 نسخ الكل</button>
+  <div class="card" id="rC" style="display:none">
+    <div class="rh">
+      <div class="rt">النتائج <span class="cp" id="cP">0</span></div>
+      <button class="ca" onclick="cpAll()">📋 نسخ الكل</button>
     </div>
-    <div class="res-list" id="resList"></div>
+    <div class="rl" id="rL"></div>
   </div>
-
-  <div class="card" id="emptyCard">
-    <div class="empty"><div class="e-ico">📊</div><div class="e-txt">استورد ملف Excel<br>ثم ابحث عن الاسم الثلاثي</div></div>
+  <div class="card" id="eC">
+    <div class="em"><div class="ei">📊</div><div class="et">استورد ملف Excel<br>ثم ابحث عن الاسم الثلاثي</div></div>
   </div>
-
-</div>
-</div>
-<div class="toast" id="toast"></div>
+</div></div>
+<div class="toast" id="tst"></div>
 
 <script>
 'use strict';
 
-/* ── تحقق من وجود مكتبة XLSX ── */
-window.addEventListener('load', () => {
-  if (typeof XLSX === 'undefined') {
-    document.getElementById('noLib').classList.add('show');
-    document.getElementById('sBtn').disabled = true;
-  }
-});
-
-/* ── الحالة ── */
-let SHEETS=[], TOTAL=0, DARK=false, MODE='exact', ACTIVE='__all__';
-
-function toggleTheme(){DARK=!DARK;document.body.setAttribute('data-theme',DARK?'dark':'light');document.getElementById('themeBtn').textContent=DARK?'☀️':'🌙';}
-
-let _tt;
-function toast(msg,ms=2500){clearTimeout(_tt);const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');_tt=setTimeout(()=>el.classList.remove('show'),ms);}
-
-function fmtSz(b){return b<1048576?(b/1024).toFixed(1)+' KB':(b/1048576).toFixed(1)+' MB';}
-function setProg(p,l){document.getElementById('pBar').style.width=Math.min(p,100)+'%';document.getElementById('pPct').textContent=Math.round(p)+'%';if(l)document.getElementById('pLbl').textContent=l;}
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-
-/* ══════════════════════════════════════════
-   تحميل الملف
-══════════════════════════════════════════ */
-async function loadFile(inp){
-  if(typeof XLSX==='undefined'){toast('❌ يلزم تشغيل make-offline.ps1 أولاً');return;}
-  const file=inp.files[0];if(!file)return;
-  SHEETS=[];TOTAL=0;ACTIVE='__all__';
-  document.getElementById('resCard').style.display='none';
-  document.getElementById('emptyCard').style.display='block';
-  document.getElementById('stats').classList.remove('show');
-  document.getElementById('sBtn').disabled=true;
-  document.getElementById('sRes').textContent='—';
-  document.getElementById('finfo').classList.add('show');
-  document.getElementById('fNm').textContent=file.name;
-  document.getElementById('fMt').textContent=fmtSz(file.size)+' • '+new Date(file.lastModified).toLocaleDateString('ar');
-  document.getElementById('fSt').textContent='يُحمَّل';
-  document.getElementById('prog').classList.add('show');
-  setProg(5,'قراءة الملف...');
-
-  const reader=new FileReader();
-  reader.onprogress=e=>{if(e.lengthComputable)setProg((e.loaded/e.total)*40,'تحميل...');};
-  reader.onload=async e=>{
-    try{
-      setProg(50,'تحليل الملف...');await sleep(30);
-      const raw=new Uint8Array(e.target.result);
-      let wb;
-      try{wb=XLSX.read(raw,{type:'array',cellText:true,cellDates:true,dense:true});}
-      catch(_){wb=XLSX.read(new TextDecoder('utf-8',{fatal:false}).decode(raw),{type:'string'});}
-      const names=wb.SheetNames;
-      setProg(65,'معالجة الأوراق...');await sleep(30);
-      for(let i=0;i<names.length;i++){
-        const ws=wb.Sheets[names[i]];
-        const json=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:false});
-        const rows=[];
-        for(const row of json){
-          const cr=row.map(c=>c!=null?String(c).trim():'');
-          if(cr.some(c=>c!=='')){rows.push(cr);TOTAL++;}
-        }
-        SHEETS.push({name:names[i],rows});
-        setProg(65+((i+1)/names.length)*32,'ورقة: '+names[i]);
-        await sleep(15);
+/* ════════════════════════════════════════════════════
+   مكتبة قراءة xlsx/xls/csv مدمجة بالكامل
+   تعمل بدون إنترنت 100%
+════════════════════════════════════════════════════ */
+const XR = {
+  /* ── CSV ── */
+  csv(txt) {
+    const rows = [];
+    const lines = txt.split(/\r?\n/);
+    for (const ln of lines) {
+      if (!ln.trim()) continue;
+      const cells = []; let cur = '', q = false;
+      for (let i = 0; i < ln.length; i++) {
+        const c = ln[i];
+        if (c === '"') { q = !q; continue; }
+        if (c === ',' && !q) { cells.push(cur.trim()); cur = ''; }
+        else cur += c;
       }
-      setProg(100,'اكتمل ✅');
-      document.getElementById('fSt').textContent='✅ جاهز';
-      document.getElementById('sRows').textContent=TOTAL.toLocaleString('ar');
-      document.getElementById('sShts').textContent=names.length.toLocaleString('ar');
-      document.getElementById('stats').classList.add('show');
-      document.getElementById('sBtn').disabled=false;
-      buildChips(names);
-      toast('✅ '+file.name+' — '+TOTAL.toLocaleString('ar')+' صف');
-      setTimeout(()=>document.getElementById('prog').classList.remove('show'),900);
-    }catch(err){
-      console.error(err);
-      document.getElementById('fSt').textContent='❌ خطأ';
-      toast('❌ فشل قراءة الملف: '+err.message);
-      document.getElementById('prog').classList.remove('show');
+      cells.push(cur.trim());
+      if (cells.some(x => x)) rows.push(cells);
     }
-  };
-  reader.readAsArrayBuffer(file);
-}
+    return [{ name: 'Sheet1', rows }];
+  },
 
-function buildChips(names){
-  const w=document.getElementById('shChips');
-  w.innerHTML='<button class="chip active" onclick="selSheet(\'__all__\',this)">كل الأوراق</button>';
-  names.forEach(n=>{const b=document.createElement('button');b.className='chip';b.textContent=n;b.onclick=()=>selSheet(n,b);w.appendChild(b);});
-}
+  /* ── XLSX / XLSM / XLTX (ZIP+XML) ── */
+  async xlsx(buf) {
+    const u8 = new Uint8Array(buf);
+    const files = await this._unzip(u8);
+    if (!files) return null;
 
-function selSheet(n,btn){
-  ACTIVE=n;
-  document.querySelectorAll('#shChips .chip').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-}
+    const ss = this._ss(files['xl/sharedStrings.xml'] || '');
+    const wb = this._wb(files['xl/workbook.xml'] || '');
+    const rl = this._rl(files['xl/_rels/workbook.xml.rels'] || '');
+    const sheets = [];
 
-let fOpen=false;
-function togFilter(){fOpen=!fOpen;document.getElementById('fpanel').classList.toggle('show',fOpen);document.getElementById('fArr').textContent=fOpen?'▲':'▼';document.getElementById('fTxt').textContent=fOpen?'إخفاء الخيارات':'خيارات الفلترة';}
+    for (const sh of wb) {
+      const tgt = rl[sh.id];
+      if (!tgt) continue;
+      const key = 'xl/' + tgt.replace(/^\.\.\//, '');
+      const xml = files[key] || files['xl/worksheets/' + tgt.split('/').pop()] || '';
+      if (!xml) continue;
+      sheets.push({ name: sh.name, rows: this._ws(xml, ss) });
+    }
+    return sheets.length ? sheets : null;
+  },
 
-const MINFO={
-  exact:{pill:'🎯 ترتيب دقيق',desc:'🎯 <b>ترتيب دقيق:</b> يبحث بالترتيب المكتوب بالضبط — سواء في خلية واحدة أو خلايا متتالية بالصف'},
-  any:{pill:'🔄 أي ترتيب',desc:'🔄 <b>أي ترتيب:</b> يبحث عن الكلمات في أي مكان وأي ترتيب داخل الصف'},
-  start:{pill:'▶️ يبدأ بـ',desc:'▶️ <b>يبدأ بـ:</b> يجلب الصفوف التي تبدأ بالكلمة الأولى وتحتوي الباقي'}
+  /* ── فك ZIP ── */
+  async _unzip(u8) {
+    const out = {};
+    let i = 0;
+    while (i < u8.length - 30) {
+      if (u8[i] !== 0x50 || u8[i+1] !== 0x4B || u8[i+2] !== 0x03 || u8[i+3] !== 0x04) { i++; continue; }
+      const cm   = u8[i+8]  | u8[i+9]<<8;
+      const csz  = u8[i+18] | u8[i+19]<<8 | u8[i+20]<<16 | (u8[i+21] & 0x7f)<<24;
+      const usz  = u8[i+22] | u8[i+23]<<8 | u8[i+24]<<16 | (u8[i+25] & 0x7f)<<24;
+      const nlen = u8[i+26] | u8[i+27]<<8;
+      const xlen = u8[i+28] | u8[i+29]<<8;
+      const name = new TextDecoder().decode(u8.subarray(i+30, i+30+nlen));
+      const ds   = i + 30 + nlen + xlen;
+      const dat  = u8.subarray(ds, ds + csz);
+      if (name.endsWith('.xml') || name.endsWith('.rels')) {
+        try {
+          if (cm === 0) out[name] = new TextDecoder('utf-8', {fatal:false}).decode(dat);
+          else if (cm === 8) out[name] = await this._inf(dat);
+        } catch(_) {}
+      }
+      i = ds + csz;
+    }
+    return Object.keys(out).length ? out : null;
+  },
+
+  /* ── inflate async via DecompressionStream ── */
+  async _inf(dat) {
+    try {
+      const ds = new DecompressionStream('deflate-raw');
+      const writer = ds.writable.getWriter();
+      const reader = ds.readable.getReader();
+      writer.write(dat);
+      writer.close();
+      const chunks = [];
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+      }
+      let total = chunks.reduce((s, c) => s + c.length, 0);
+      const result = new Uint8Array(total);
+      let offset = 0;
+      for (const chunk of chunks) { result.set(chunk, offset); offset += chunk.length; }
+      return new TextDecoder('utf-8', {fatal:false}).decode(result);
+    } catch(e) {
+      // fallback: raw decode
+      return new TextDecoder('utf-8', {fatal:false}).decode(dat);
+    }
+  },
+
+  /* ── Shared Strings ── */
+  _ss(xml) {
+    const arr = [];
+    const re = /<si>([\s\S]*?)<\/si>/g;
+    let m;
+    while ((m = re.exec(xml)) !== null) {
+      const si = m[1];
+      let val = '';
+      const tr = /<t[^>]*>([^<]*)<\/t>/g;
+      let tm;
+      while ((tm = tr.exec(si)) !== null) val += tm[1];
+      arr.push(this._xe(val));
+    }
+    return arr;
+  },
+
+  /* ── Workbook ── */
+  _wb(xml) {
+    const sheets = [];
+    const re = /<sheet[^>]+name="([^"]*)"[^>]+r:id="([^"]*)"/g;
+    let m;
+    while ((m = re.exec(xml)) !== null) sheets.push({ name: this._xe(m[1]), id: m[2] });
+    return sheets;
+  },
+
+  /* ── Relationships ── */
+  _rl(xml) {
+    const map = {};
+    const re = /<Relationship[^>]+Id="([^"]*)"[^>]+Target="([^"]*)"/g;
+    let m;
+    while ((m = re.exec(xml)) !== null) map[m[1]] = m[2];
+    return map;
+  },
+
+  /* ── Worksheet ── */
+  _ws(xml, ss) {
+    const rows = [];
+    /* استخرج الصفوف */
+    const rowRe = /<row[^>]*>([\s\S]*?)<\/row>/g;
+    let rm;
+    while ((rm = rowRe.exec(xml)) !== null) {
+      const rowXml = rm[1];
+      const cells = {};
+      const cRe = /<c\s([^>]*)>([\s\S]*?)<\/c>/g;
+      let cm;
+      while ((cm = cRe.exec(rowXml)) !== null) {
+        const attrs = cm[1];
+        const inner = cm[2];
+        /* موقع الخلية */
+        const refM = attrs.match(/r="([A-Z]+)(\d+)"/);
+        if (!refM) continue;
+        const col = this._col(refM[1]);
+        /* نوع القيمة */
+        const tM = attrs.match(/t="([^"]*)"/);
+        const vM = inner.match(/<v>([^<]*)<\/v>/);
+        const isM = inner.match(/<is>([\s\S]*?)<\/is>/);
+        let val = '';
+        if (isM) {
+          const tRe2 = /<t[^>]*>([^<]*)<\/t>/g; let tm2;
+          while ((tm2 = tRe2.exec(isM[1])) !== null) val += tm2[1];
+          val = this._xe(val);
+        } else if (vM) {
+          const raw = vM[1];
+          if (tM && tM[1] === 's') {
+            val = ss[parseInt(raw)] || '';
+          } else {
+            val = raw;
+          }
+        }
+        if (val !== '') cells[col] = val;
+      }
+      if (Object.keys(cells).length) {
+        const maxC = Math.max(...Object.keys(cells));
+        const arr = [];
+        for (let i = 0; i <= maxC; i++) arr.push(cells[i] || '');
+        rows.push(arr);
+      }
+    }
+    return rows;
+  },
+
+  /* ── تحويل عمود (A→0, B→1, AA→26) ── */
+  _col(s) {
+    let n = 0;
+    for (let i = 0; i < s.length; i++) n = n * 26 + s.charCodeAt(i) - 64;
+    return n - 1;
+  },
+
+  /* ── XML entities ── */
+  _xe(s) {
+    return s.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#(\d+);/g,(_,n)=>String.fromCharCode(n)).replace(/&#x([0-9a-fA-F]+);/g,(_,h)=>String.fromCharCode(parseInt(h,16)));
+  }
 };
 
-function setMode(m){
+/* ════════════════════════════════════════════════════
+   الحالة
+════════════════════════════════════════════════════ */
+let SH=[], TOT=0, DK=false, MODE='exact', ACT='__all__';
+
+function tTheme(){DK=!DK;document.body.setAttribute('data-theme',DK?'dark':'light');document.getElementById('tBtn').textContent=DK?'☀️':'🌙';}
+
+let _t;
+function toast(m,ms=2500){clearTimeout(_t);const e=document.getElementById('tst');e.textContent=m;e.classList.add('on');_t=setTimeout(()=>e.classList.remove('on'),ms);}
+function sz(b){return b<1048576?(b/1024).toFixed(1)+' KB':(b/1048576).toFixed(1)+' MB';}
+function sp(p,l){document.getElementById('pBr').style.width=Math.min(p,100)+'%';document.getElementById('pPc').textContent=Math.round(p)+'%';if(l)document.getElementById('pLb').textContent=l;}
+const slp=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* ════════════════════════════════════════════════════
+   تحميل الملف
+════════════════════════════════════════════════════ */
+async function loadF(inp) {
+  const file = inp.files[0]; if (!file) return;
+  SH=[]; TOT=0; ACT='__all__';
+  document.getElementById('rC').style.display='none';
+  document.getElementById('eC').style.display='block';
+  document.getElementById('sts').classList.remove('on');
+  document.getElementById('sB').disabled=true;
+  document.getElementById('sN').textContent='—';
+  document.getElementById('finf').classList.add('on');
+  document.getElementById('fNm').textContent=file.name;
+  document.getElementById('fMt').textContent=sz(file.size)+' • '+new Date(file.lastModified).toLocaleDateString('ar');
+  document.getElementById('fSt').textContent='يُحمَّل';
+  document.getElementById('pg').classList.add('on');
+  sp(5,'قراءة الملف...');
+
+  const buf = await file.arrayBuffer();
+  sp(30,'تحليل الملف...'); await slp(20);
+
+  try {
+    let sheets = null;
+    const name = file.name.toLowerCase();
+
+    if (name.endsWith('.csv')) {
+      const txt = new TextDecoder('utf-8',{fatal:false}).decode(buf);
+      sheets = XR.csv(txt);
+    } else if (name.endsWith('.xlsx')||name.endsWith('.xlsm')||name.endsWith('.xltx')||name.endsWith('.xltm')) {
+      sheets = await XR.xlsx(buf);
+      if (!sheets) throw new Error('تعذّر فك ضغط الملف — جرّب حفظه كـ CSV من Excel');
+    } else if (name.endsWith('.xls')||name.endsWith('.xlsb')) {
+      throw new Error('صيغة XLS/XLSB غير مدعومة — يرجى فتح الملف في Excel وحفظه كـ XLSX أو CSV');
+    } else {
+      sheets = await XR.xlsx(buf);
+      if (!sheets) throw new Error('تعذّر قراءة الملف');
+    }
+
+    sp(70,'بناء قاعدة البيانات...'); await slp(20);
+
+    for (let i=0; i<sheets.length; i++) {
+      const rows = sheets[i].rows.filter(r=>r.some(c=>c&&c.trim()!==''));
+      SH.push({ name: sheets[i].name, rows });
+      TOT += rows.length;
+      sp(70+((i+1)/sheets.length)*28, 'ورقة: '+sheets[i].name);
+      await slp(10);
+    }
+
+    sp(100,'اكتمل ✅');
+    document.getElementById('fSt').textContent='✅ جاهز';
+    document.getElementById('sR').textContent=TOT.toLocaleString('ar');
+    document.getElementById('sS').textContent=SH.length.toLocaleString('ar');
+    document.getElementById('sts').classList.add('on');
+    document.getElementById('sB').disabled=false;
+    bChips(SH.map(s=>s.name));
+    toast('✅ '+file.name+' — '+TOT.toLocaleString('ar')+' صف');
+    setTimeout(()=>document.getElementById('pg').classList.remove('on'),900);
+
+  } catch(err) {
+    console.error(err);
+    document.getElementById('fSt').textContent='❌ خطأ';
+    toast('❌ '+err.message);
+    document.getElementById('pg').classList.remove('on');
+  }
+}
+
+function bChips(names){
+  const w=document.getElementById('shC');
+  w.innerHTML='<button class="ch on" onclick="sSheet(\'__all__\',this)">كل الأوراق</button>';
+  names.forEach(n=>{const b=document.createElement('button');b.className='ch';b.textContent=n;b.onclick=()=>sSheet(n,b);w.appendChild(b);});
+}
+function sSheet(n,btn){ACT=n;document.querySelectorAll('#shC .ch').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+
+let fo=false;
+function tF(){fo=!fo;document.getElementById('fpn').classList.toggle('on',fo);document.getElementById('fA').textContent=fo?'▲':'▼';document.getElementById('fT').textContent=fo?'إخفاء الخيارات':'خيارات الفلترة';}
+
+const MI={
+  exact:{p:'🎯 ترتيب دقيق',d:'🎯 <b>ترتيب دقيق:</b> يبحث بالترتيب المكتوب بالضبط — في خلية واحدة أو خلايا متتالية'},
+  any:{p:'🔄 أي ترتيب',d:'🔄 <b>أي ترتيب:</b> يبحث عن الكلمات في أي مكان وأي ترتيب داخل الصف'},
+  start:{p:'▶️ يبدأ بـ',d:'▶️ <b>يبدأ بـ:</b> يجلب الصفوف التي تبدأ بالكلمة الأولى وتحتوي الباقي'}
+};
+function sMode(m){
   MODE=m;
-  ['exact','any','start'].forEach(x=>document.getElementById('m'+x.charAt(0).toUpperCase()+x.slice(1)).classList.toggle('active',x===m));
-  document.getElementById('mPill').textContent=MINFO[m].pill;
-  document.getElementById('mDesc').innerHTML=MINFO[m].desc;
+  ['exact','any','start'].forEach(x=>{
+    const id=x==='exact'?'mE':x==='any'?'mA':'mS';
+    document.getElementById(id).classList.toggle('on',x===m);
+  });
+  document.getElementById('mP').textContent=MI[m].p;
+  document.getElementById('mD').innerHTML=MI[m].d;
 }
 
-function onInp(){document.getElementById('sBtn').disabled=SHEETS.length===0||!document.getElementById('sIn').value.trim();}
+function onI(){document.getElementById('sB').disabled=SH.length===0||!document.getElementById('sI').value.trim();}
 
-/* ══════════════════════════════════════════
+/* ════════════════════════════════════════════════════
    تطبيع النص العربي
-══════════════════════════════════════════ */
-function norm(t){
+════════════════════════════════════════════════════ */
+function nm(t){
   return String(t)
-    .replace(/[أإآا]/g,'ا')
-    .replace(/ة/g,'ه')
-    .replace(/ى/g,'ي')
+    .replace(/[أإآا]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي')
     .replace(/[\u064B-\u065F\u0670]/g,'')
-    .replace(/\s+/g,' ')
-    .trim().toLowerCase();
+    .replace(/\s+/g,' ').trim().toLowerCase();
 }
 
-/* ══════════════════════════════════════════
-   محرك البحث الدقيق — 3 استراتيجيات
-══════════════════════════════════════════ */
-function matchRow(qw,row){
-  const nr=row.map(c=>norm(c));
+/* ════════════════════════════════════════════════════
+   محرك البحث الدقيق
+════════════════════════════════════════════════════ */
+function mRow(qw,row){
+  const nr=row.map(c=>nm(c));
 
-  /* ① كل الكلمات في خلية واحدة */
-  for(let ci=0;ci<row.length;ci++){
-    const nc=nr[ci];if(!nc)continue;
-    if(cellMatch(qw,nc))return{matched:row[ci],ci};
+  /* ① خلية واحدة بالترتيب */
+  for(let i=0;i<row.length;i++){
+    const nc=nr[i]; if(!nc) continue;
+    if(mCell(qw,nc)) return {matched:row[i],ci:i};
   }
 
-  /* ② خلايا متتالية بالترتيب (exact/start) */
+  /* ② خلايا متتالية بالترتيب */
   if(MODE==='exact'||MODE==='start'){
     const ne=nr.map((nc,i)=>({nc,i})).filter(x=>x.nc.length>0);
-    for(let si=0;si<=ne.length-qw.length;si++){
+    for(let s=0;s<=ne.length-qw.length;s++){
       let ok=true;
-      for(let wi=0;wi<qw.length;wi++){
-        if(!ne[si+wi].nc.includes(qw[wi])){ok=false;break;}
+      for(let w=0;w<qw.length;w++){
+        if(!ne[s+w].nc.includes(qw[w])){ok=false;break;}
       }
       if(ok){
-        const matched=ne.slice(si,si+qw.length).map(x=>row[x.i]).join(' ');
-        return{matched,ci:ne[si].i};
+        return {matched:ne.slice(s,s+qw.length).map(x=>row[x.i]).join(' '),ci:ne[s].i};
       }
     }
   }
 
-  /* ③ أي ترتيب عبر أي خلايا (any) */
+  /* ③ أي ترتيب عبر أي خلايا */
   if(MODE==='any'){
     const ne=nr.map((nc,i)=>({nc,i})).filter(x=>x.nc.length>0);
-    const used=new Set(),idxs=[];
+    const used=new Set(),idx=[];
     for(const w of qw){
-      let found=false;
+      let f=false;
       for(const {nc,i} of ne){
-        if(!used.has(i)&&nc.includes(w)){idxs.push(i);used.add(i);found=true;break;}
+        if(!used.has(i)&&nc.includes(w)){idx.push(i);used.add(i);f=true;break;}
       }
-      if(!found)return null;
+      if(!f) return null;
     }
-    return{matched:idxs.map(i=>row[i]).join(' '),ci:idxs[0]};
+    return {matched:idx.map(i=>row[i]).join(' '),ci:idx[0]};
   }
   return null;
 }
 
-function cellMatch(qw,nc){
+function mCell(qw,nc){
   if(MODE==='exact'){
     let p=0;
     for(const w of qw){const i=nc.indexOf(w,p);if(i===-1)return false;p=i+w.length;}
     return true;
   }
-  if(MODE==='any')return qw.every(w=>nc.includes(w));
-  if(MODE==='start')return nc.startsWith(qw[0])&&qw.slice(1).every(w=>nc.includes(w));
+  if(MODE==='any') return qw.every(w=>nc.includes(w));
+  if(MODE==='start') return nc.startsWith(qw[0])&&qw.slice(1).every(w=>nc.includes(w));
   return false;
 }
 
-/* ══════════════════════════════════════════
+/* ════════════════════════════════════════════════════
    البحث الرئيسي
-══════════════════════════════════════════ */
-async function doSearch(){
-  const raw=document.getElementById('sIn').value.trim();
-  if(!raw||!SHEETS.length)return;
-  const qw=raw.split(/\s+/).filter(w=>w.length>0).map(norm);
-  if(!qw.length)return;
+════════════════════════════════════════════════════ */
+async function doS(){
+  const raw=document.getElementById('sI').value.trim();
+  if(!raw||!SH.length) return;
+  const qw=raw.split(/\s+/).filter(w=>w.length>0).map(nm);
+  if(!qw.length) return;
 
-  const results=[];
-  document.getElementById('emptyCard').style.display='none';
-  document.getElementById('resCard').style.display='none';
-  document.getElementById('prog').classList.add('show');
-  setProg(0,'جاري البحث...');
-  await sleep(20);
+  const res=[];
+  document.getElementById('eC').style.display='none';
+  document.getElementById('rC').style.display='none';
+  document.getElementById('pg').classList.add('on');
+  sp(0,'جاري البحث...');
+  await slp(20);
 
-  const targets=ACTIVE==='__all__'?SHEETS:SHEETS.filter(s=>s.name===ACTIVE);
-  for(let si=0;si<targets.length;si++){
-    for(const row of targets[si].rows){
-      const r=matchRow(qw,row);
-      if(r)results.push({name:r.matched,sheet:targets[si].name,row});
+  const tgt=ACT==='__all__'?SH:SH.filter(s=>s.name===ACT);
+  for(let i=0;i<tgt.length;i++){
+    for(const row of tgt[i].rows){
+      const r=mRow(qw,row);
+      if(r) res.push({name:r.matched,sheet:tgt[i].name,row});
     }
-    setProg(((si+1)/targets.length)*100,'بحث في: '+targets[si].name);
-    await sleep(10);
+    sp(((i+1)/tgt.length)*100,'بحث في: '+tgt[i].name);
+    await slp(8);
   }
 
-  setProg(100,'اكتمل ✅');
-  setTimeout(()=>document.getElementById('prog').classList.remove('show'),700);
-  document.getElementById('sRes').textContent=results.length.toLocaleString('ar');
-  render(results,raw.split(/\s+/).filter(w=>w.length>0));
+  sp(100,'اكتمل ✅');
+  setTimeout(()=>document.getElementById('pg').classList.remove('on'),700);
+  document.getElementById('sN').textContent=res.length.toLocaleString('ar');
+  rend(res,raw.split(/\s+/).filter(w=>w.length>0));
 }
 
-/* ══════════════════════════════════════════
+/* ════════════════════════════════════════════════════
    عرض النتائج
-══════════════════════════════════════════ */
-function render(results,qw){
-  const list=document.getElementById('resList');
+════════════════════════════════════════════════════ */
+function rend(res,qw){
+  const list=document.getElementById('rL');
   list.innerHTML='';
-  document.getElementById('cntP').textContent=results.length;
-  document.getElementById('resCard').style.display='block';
-  if(!results.length){
-    list.innerHTML='<div class="empty"><div class="e-ico">🔍</div><div class="e-txt">لا توجد نتائج<br>جرّب تغيير وضع البحث أو راجع الإملاء</div></div>';
+  document.getElementById('cP').textContent=res.length;
+  document.getElementById('rC').style.display='block';
+  if(!res.length){
+    list.innerHTML='<div class="em"><div class="ei">🔍</div><div class="et">لا توجد نتائج<br>جرّب تغيير وضع البحث أو راجع الإملاء</div></div>';
     return;
   }
-  const nq=qw.map(norm);
-  results.forEach((r,i)=>{
+  const nq=qw.map(nm);
+  res.forEach((r,i)=>{
     const cells=r.row.filter(c=>c&&c.trim()!=='');
     const cp=cells.join(' | ');
     const ch=cells.map(c=>{
-      const isH=nq.some(w=>norm(c).includes(w));
-      return '<span class="cell'+(isH?' hit':'')+'">'+esc(c)+'</span>';
+      const h=nq.some(w=>nm(c).includes(w));
+      return '<span class="ce'+(h?' ht':'')+'">'+es(c)+'</span>';
     }).join('');
     const d=document.createElement('div');
-    d.className='ritem';d.style.animationDelay=(i*30)+'ms';d.dataset.copy=cp;
-    d.innerHTML=
-      '<button class="cbtn" onclick="cpItem(this,event)">📋</button>'+
-      '<div class="rname">'+hlName(r.name,qw)+'</div>'+
-      '<div class="rtags"><span class="rtag">📄 '+esc(r.sheet)+'</span><span class="rtag">#'+(i+1)+'</span></div>'+
-      '<div class="rcells">'+ch+'</div>';
+    d.className='ri'; d.style.animationDelay=(i*30)+'ms'; d.dataset.copy=cp;
+    d.innerHTML='<button class="cb" onclick="cI(this,event)">📋</button>'+
+      '<div class="rn">'+hl(r.name,qw)+'</div>'+
+      '<div class="rtg"><span class="tg">📄 '+es(r.sheet)+'</span><span class="tg">#'+(i+1)+'</span></div>'+
+      '<div class="rc">'+ch+'</div>';
     list.appendChild(d);
   });
-  setTimeout(()=>document.getElementById('resCard').scrollIntoView({behavior:'smooth',block:'start'}),80);
+  setTimeout(()=>document.getElementById('rC').scrollIntoView({behavior:'smooth',block:'start'}),80);
 }
 
-function hlName(txt,words){
-  let r=esc(txt);
-  words.forEach(w=>{if(!w)try{r=r.replace(new RegExp(eRe(esc(w)),'gi'),m=>'<mark>'+m+'</mark>');}catch(_){}}); 
+function hl(txt,words){
+  let r=es(txt);
+  words.forEach(w=>{if(w)try{r=r.replace(new RegExp(er(es(w)),'gi'),m=>'<mark>'+m+'</mark>');}catch(_){}});
   return r;
 }
-function eRe(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
-function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function er(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+function es(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-function cpItem(btn,e){
+function cI(btn,e){
   e.stopPropagation();
-  wClip(btn.closest('.ritem').dataset.copy);
-  btn.textContent='✅';btn.classList.add('done');
-  setTimeout(()=>{btn.textContent='📋';btn.classList.remove('done');},2000);
+  wC(btn.closest('.ri').dataset.copy);
+  btn.textContent='✅'; btn.classList.add('ok');
+  setTimeout(()=>{btn.textContent='📋';btn.classList.remove('ok');},2000);
 }
-function copyAll(){
-  const items=[...document.querySelectorAll('.ritem')];
-  wClip(items.map((el,i)=>(i+1)+'. '+el.dataset.copy).join('\n\n'));
+function cpAll(){
+  const items=[...document.querySelectorAll('.ri')];
+  wC(items.map((e,i)=>(i+1)+'. '+e.dataset.copy).join('\n\n'));
   toast('✅ تم نسخ '+items.length+' نتيجة');
 }
-function wClip(t){
-  if(navigator.clipboard){navigator.clipboard.writeText(t).then(()=>toast('✅ تم النسخ!')).catch(()=>fbClip(t));}
-  else fbClip(t);
+function wC(t){
+  if(navigator.clipboard){navigator.clipboard.writeText(t).then(()=>toast('✅ تم النسخ!')).catch(()=>fb(t));}
+  else fb(t);
 }
-function fbClip(t){
-  const ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;opacity:0;top:0;left:0';
-  document.body.appendChild(ta);ta.focus();ta.select();
+function fb(t){
+  const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0;top:0;left:0';
+  document.body.appendChild(a);a.focus();a.select();
   try{document.execCommand('copy');toast('✅ تم النسخ!');}catch(_){toast('❌ فشل النسخ');}
-  document.body.removeChild(ta);
+  document.body.removeChild(a);
 }
 
 if('serviceWorker' in navigator){
